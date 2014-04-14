@@ -7,23 +7,21 @@ package edu.iastate.cs228.hw5;
  */
 
 import java.util.AbstractSet;
-import java.util.Iterator;
 import java.util.ArrayList;
-import java.lang.IllegalArgumentException;
+import java.util.Arrays;
+import java.util.Iterator;
+import java.util.List;
 
 /**
  * Binary search tree implementation
  */
 public class BST<E extends Comparable<? super E>> extends AbstractSet<E> {
-	protected Node root;
+	protected Node<E> root;
 	protected int size;
 
-	private ArrayList<E> preorderArr; // stores the key values from a preorder
-										// traversal
-	private ArrayList<E> inorderArr; // stores the key values from an inorder
-										// traversal
-	private ArrayList<E> postorderArr; // stores the key values from a postorder
-										// traversal
+	private ArrayList<E> preorderArr; // stores the key values from a preorder traversal
+	private ArrayList<E> inorderArr; // stores the key values from an inorder traversal
+	private ArrayList<E> postorderArr; // stores the key values from a postorder traversal
 
 	/*
 	 * These tags are set to false respectively at the ends of calls to
@@ -43,7 +41,7 @@ public class BST<E extends Comparable<? super E>> extends AbstractSet<E> {
 	 * Default constructor
 	 */
 	public BST() {
-		// TODO
+		this((E[])new Object[0]);
 	}
 
 	/**
@@ -52,7 +50,14 @@ public class BST<E extends Comparable<? super E>> extends AbstractSet<E> {
 	 * @param eleArray
 	 */
 	public BST(E[] eleArray) {
-		// TODO
+		this.root = null;
+		this.size = 0;
+		
+		this.preorderArr = new ArrayList<>();
+		this.inorderArr= new ArrayList<>();
+		this.postorderArr = new ArrayList<>();
+		
+		addAll(Arrays.asList(eleArray));
 	}
 
 	/**
@@ -64,7 +69,21 @@ public class BST<E extends Comparable<? super E>> extends AbstractSet<E> {
 	 *            root of an existing binary search tree
 	 */
 	public BST(BST<E> tree) throws TreeStructureException {
-		// TODO
+		if (!tree.isBST(tree.root)) {
+			throw new TreeStructureException("Copying a non-BST tree");
+		}
+		ArrayList<E> pre = new ArrayList<>();
+		tree.getInorderSequence(pre);
+		addAll(pre);
+	}
+	
+	private void addAll(List<E> eles) {
+		if (eles == null) {
+			return;
+		}
+		for (E ele : eles) {
+			this.add(ele);
+		}
 	}
 
 	// -------
@@ -90,8 +109,14 @@ public class BST<E extends Comparable<? super E>> extends AbstractSet<E> {
 	 * @return tree height
 	 */
 	public int height() {
-		// TODO
-		return -1;
+		return heightRec(root);
+	}
+	
+	private int heightRec(Node<E> root) {
+		if (root == null) {
+			return 0;
+		}
+		return 1 + heightRec(root.getLeft()) + heightRec(root.getRight());
 	}
 
 	/**
@@ -99,8 +124,11 @@ public class BST<E extends Comparable<? super E>> extends AbstractSet<E> {
 	 * @return the minimum element in the tree
 	 */
 	public E min() {
-		// TODO
-		return null;
+		if (size == 0) {
+			return null;
+		}
+		this.getInorderSequence(inorderArr);
+		return inorderArr.get(0);
 	}
 
 	/**
@@ -108,8 +136,11 @@ public class BST<E extends Comparable<? super E>> extends AbstractSet<E> {
 	 * @return the maximum element in the tree
 	 */
 	public E max() {
-		// TODO
-		return null;
+		if (size == 0) {
+			return null;
+		}
+		this.getInorderSequence(inorderArr);
+		return inorderArr.get(inorderArr.size() - 1);
 	}
 
 	/**
