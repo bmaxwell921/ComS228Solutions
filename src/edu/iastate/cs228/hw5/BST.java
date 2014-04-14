@@ -54,7 +54,7 @@ public class BST<E extends Comparable<? super E>> extends AbstractSet<E> {
 		this.size = 0;
 		
 		this.preorderArr = new ArrayList<>();
-		this.inorderArr= new ArrayList<>();
+		this.inorderArr = new ArrayList<>();
 		this.postorderArr = new ArrayList<>();
 		
 		addAll(Arrays.asList(eleArray));
@@ -116,7 +116,7 @@ public class BST<E extends Comparable<? super E>> extends AbstractSet<E> {
 		if (root == null) {
 			return 0;
 		}
-		return 1 + heightRec(root.getLeft()) + heightRec(root.getRight());
+		return 1 + Math.max(heightRec(root.getLeft()), heightRec(root.getRight()));
 	}
 
 	/**
@@ -149,7 +149,20 @@ public class BST<E extends Comparable<? super E>> extends AbstractSet<E> {
 	 *            array list to store the sequence
 	 */
 	public void getPreorderSequence(ArrayList<E> arr) {
-		// TODO
+		if (!redoPreorder) {
+			arr.addAll(preorderArr);
+		}
+		preOrderRec(root, preorderArr);
+		arr.addAll(preorderArr);
+	}
+	
+	private void preOrderRec(Node<E> root, ArrayList<E> arr) {
+		if (root == null) {
+			return;
+		}
+		arr.add(root.getData());
+		preOrderRec(root.getLeft(), arr);
+		preOrderRec(root.getRight(), arr);
 	}
 
 	/**
@@ -309,7 +322,7 @@ public class BST<E extends Comparable<? super E>> extends AbstractSet<E> {
 	 * @param key
 	 * @return the node containing key, or null if not found
 	 */
-	protected Node findEntry(E key) {
+	protected Node<E> findEntry(E key) {
 		// from BSTset.java
 		return null;
 	}
@@ -325,7 +338,7 @@ public class BST<E extends Comparable<? super E>> extends AbstractSet<E> {
 	 * @return the successor of the given node in this tree, or null if there is
 	 *         no successor
 	 */
-	protected Node successor(Node n) {
+	protected Node<E> successor(Node<E> n) {
 		// from BSTSet.java
 		return null;
 	}
@@ -337,7 +350,7 @@ public class BST<E extends Comparable<? super E>> extends AbstractSet<E> {
 	 * @return the predecessor of the given node in this tree, or null if there
 	 *         is no successor
 	 */
-	public Node predecessor(Node n) {
+	public Node<E> predecessor(Node<E> n) {
 		// ToDO
 		return null;
 	}
@@ -347,7 +360,7 @@ public class BST<E extends Comparable<? super E>> extends AbstractSet<E> {
 	 * 
 	 * @param n
 	 */
-	public void leftRotate(Node n) {
+	public void leftRotate(Node<E> n) {
 		// TODO
 	}
 
@@ -356,7 +369,7 @@ public class BST<E extends Comparable<? super E>> extends AbstractSet<E> {
 	 * 
 	 * @param n
 	 */
-	public void rightRotate(Node n) {
+	public void rightRotate(Node<E> n) {
 		// TODO
 	}
 
@@ -367,7 +380,7 @@ public class BST<E extends Comparable<? super E>> extends AbstractSet<E> {
 	 * @param n
 	 *            node to be removed
 	 */
-	protected void unlinkNode(Node n) {
+	protected void unlinkNode(Node<E> n) {
 		// from BSTSet.java
 	}
 
@@ -409,7 +422,7 @@ public class BST<E extends Comparable<? super E>> extends AbstractSet<E> {
 	 * @param depth
 	 *            depth of the given node in the tree
 	 */
-	private void toStringRec(Node n, StringBuilder sb, int depth) {
+	private void toStringRec(Node<E> n, StringBuilder sb, int depth) {
 		// from BSTSet.java
 	}
 
