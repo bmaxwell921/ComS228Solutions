@@ -2,7 +2,7 @@ package edu.iastate.cs228.hw5;
 
 /**
  *  
- * @author Steve Kautz
+ * @author 228 instructors
  *
  */
 
