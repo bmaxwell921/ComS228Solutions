@@ -22,11 +22,14 @@ public class Node<E> {
 	private Node<E> right;
 
 	public Node(E dat) {
-		// TODO
+		this(dat, null, null);
 	}
 
 	public Node(E dat, Node<E> left, Node<E> right) {
-		// TODO
+		this.data = dat;
+		this.left = left;
+		this.right = right;
+		this.parent = null;
 	}
 
 	/**
