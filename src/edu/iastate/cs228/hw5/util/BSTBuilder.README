@@ -1,0 +1,58 @@
+===============================================================================
+Overview
+===============================================================================
+Hello! Since the BSTBuilder is fairly complicated in its use, I thought I would add a readme rather than solely relying on Javadocs.
+
+As its name implies, the BSTBuilder is a utility that you can use to build BST objects. The parameter you pass in is simply a
+2D array of the data that you want in the resultant tree, level by level. It will read the array top to bottom (relative to the tree)
+and left to right. See the examples below for additional information.
+
+In order to have Nodes with null left or right children, you have to put a null into the array. However, the generation skips
+Nodes that are null, so you're not required to fill in the entire tree. I.e. say a null node has null children so siblings' 
+children get set up properly. Again, see the examples below for details.
+
+Also, you are not required to provide the last level (ie one full of nulls). If you do, then you must provide values for
+all the leaves from the previous level. See EX1, EX2, EX3
+
+===============================================================================
+Exceptions
+===============================================================================
+Since this utility is meant to build BSTs, it will check to make sure you aren't attempting to build an invalid BST.
+If you don't provide enough data in a level 
+
+===============================================================================
+Examples
+===============================================================================
+Note: I use inline array creation for all the examples. I think it's easier to read, and it's much easier to code quickly.
+	If you're not familiar with this idea, Google it. Also, the Resultant Tree is shown in pseudo-toString formation, I'm showing
+	where null children are, but you don't do that on your hw.
+
+	- Normal Cases:
+		EX1: Full tree, explicitly define last level: 
+			- Call: BSTBuilder.buildBST(new String[][] {{"B"}, {"A", "C"}, {null, null, null, null}});
+			- Resultant Tree:
+				+ B
+					- A
+						- null
+						- null
+					- C
+						- null
+						- null
+		EX2: Full tree, leaving off last level:
+			- Call: BSTBuilder.buildBST(new String[][] {{"B"}, {"A", "C"});
+			- Resultant Tree:
+				+ B
+					- A
+						- null
+						- null
+					- C
+						- null
+						- null
+		EX3: Non-full tree, explicity define last level. NOTE: We only define children for 'D'!
+			- Call: BSTBuilder.buildBST(new String[][] {{"B"}, {null, "D"}, {null, null}});
+			- Resultant Tree:
+				+ B
+					- null
+					- D
+						- null
+						- null
