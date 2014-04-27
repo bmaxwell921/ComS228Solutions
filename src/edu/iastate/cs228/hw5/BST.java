@@ -1,4 +1,5 @@
 package edu.iastate.cs228.hw5;
+
 import java.util.AbstractSet;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -7,8 +8,9 @@ import java.util.List;
 
 /**
  * Binary search tree implementation
+ * 
  * @author Brandon
- *
+ * 
  * @param <E>
  */
 public class BST<E extends Comparable<? super E>> extends AbstractSet<E> {
@@ -138,7 +140,7 @@ public class BST<E extends Comparable<? super E>> extends AbstractSet<E> {
 		while (cur.getLeft() != null) {
 			cur = cur.getLeft();
 		}
-		
+
 		return cur.getData();
 	}
 
@@ -192,7 +194,7 @@ public class BST<E extends Comparable<? super E>> extends AbstractSet<E> {
 		traversePostorder();
 		arr.addAll(postorderArr);
 	}
-	
+
 	private void postOrderRec(Node<E> root, ArrayList<E> arr) {
 		if (root == null) {
 			return;
@@ -251,7 +253,7 @@ public class BST<E extends Comparable<? super E>> extends AbstractSet<E> {
 		}
 		return listString(preorderArr);
 	}
-	
+
 	private void preorderRec(Node<E> root) {
 		if (root == null) {
 			return;
@@ -273,7 +275,7 @@ public class BST<E extends Comparable<? super E>> extends AbstractSet<E> {
 		}
 		return listString(inorderArr);
 	}
-	
+
 	private void inorderRec(Node<E> root) {
 		if (root == null) {
 			return;
@@ -295,7 +297,7 @@ public class BST<E extends Comparable<? super E>> extends AbstractSet<E> {
 		}
 		return listString(postorderArr);
 	}
-	
+
 	private void postorderRec(Node<E> root) {
 		if (root == null) {
 			return;
@@ -304,7 +306,7 @@ public class BST<E extends Comparable<? super E>> extends AbstractSet<E> {
 		postorderRec(root.getRight());
 		postorderArr.add(root.getData());
 	}
-	
+
 	// Converts the given list to SSV - Space Separated Values
 	private String listString(List<E> list) {
 		if (list == null) {
@@ -477,9 +479,43 @@ public class BST<E extends Comparable<? super E>> extends AbstractSet<E> {
 	 */
 	@Override
 	public String toString() {
-		// from BSTSet.java
+		StringBuilder sb = new StringBuilder();
+	    toStringRec(root, sb, 0);
+	    return sb.toString();
+	}
 
-		return null;
+	/**
+	 * Preorder traversal of the tree that builds a string representation in the
+	 * given StringBuilder.
+	 * 
+	 * @param n
+	 *            root of subtree to be traversed
+	 * @param sb
+	 *            StringBuilder in which to create a string representation
+	 * @param depth
+	 *            depth of the given node in the tree
+	 */
+	private void toStringRec(Node<E> n, StringBuilder sb, int depth) {
+		for (int i = 0; i < depth; ++i) {
+			sb.append("  ");
+		}
+
+		if (n == null) {
+			sb.append("-\n");
+			return;
+		}
+
+		if (n.getLeft() != null || n.getRight() != null) {
+			sb.append("+ ");
+		} else {
+			sb.append("- ");
+		}
+		sb.append(n.getData().toString());
+		sb.append("\n");
+		if (n.getLeft() != null || n.getRight() != null) {
+			toStringRec(n.getLeft(), sb, depth + 1);
+			toStringRec(n.getRight(), sb, depth + 1);
+		}
 	}
 
 	/**
