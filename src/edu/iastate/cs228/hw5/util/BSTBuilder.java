@@ -1,9 +1,10 @@
 package edu.iastate.cs228.hw5.util;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashSet;
+import java.util.LinkedList;
 import java.util.List;
+import java.util.Queue;
 import java.util.Set;
 
 import edu.iastate.cs228.hw5.BST;
@@ -16,6 +17,8 @@ import edu.iastate.cs228.hw5.Node;
  * 
  */
 public class BSTBuilder {
+
+	private static final int LEVEL_0_COUNT = 1;
 
 	/**
 	 * Builds a BST object with the given information. See the included README
@@ -37,179 +40,160 @@ public class BSTBuilder {
 			return new BST<E>(null, 0);
 		}
 
-		if (hasDuplicates(levels)) {
-			duplicateValues();
-		}
-
-		final Node<E> root = buildRoot(levels[0]);
-		List<Node<E>> l = new ArrayList<>();
-		l.add(root);
-
-		buildTree(l, 1, levels);
-
-		int size = countSize(levels);
-
-		return new BST<>(root, size);
+		validateLevels(levels);
+		List<E> data = flatten(levels);
+		validateNoDuplicates(data);
+		
+		return buildTree(data);
 	}
 
-	// Checks for dupliate values in the tree
-	private static boolean hasDuplicates(Object[][] levels) {
-		final Set<Object> found = new HashSet<>();
-		for (Object[] level : levels) {
-			if (level == null) {
+	/*
+	 * Checks to make sure, each level has the proper number of children for the
+	 * number of parents
+	 */
+	private static void validateLevels(Object[][] levels) {
+
+		// Check the root manually
+		if (levels[0].length != LEVEL_0_COUNT) {
+			invalidChildCount(0, levels[0]);
+		}
+		validateLevelsRec(1, 1, levels);
+	}
+
+	/*
+	 * Recursively checks that the number of children is proper for the number
+	 * of parents
+	 */
+	private static void validateLevelsRec(int curLevel, int parentCount, Object[][] levels) {
+		// Success!
+		if (curLevel >= levels.length) {
+			return;
+		}
+
+		// Invalid case
+		if (levels[curLevel] == null) {
+			invalidChildCount(curLevel, levels[curLevel]);
+		}
+
+		// Check that the number of children is correct
+		if (getProperChildCount(parentCount) != levels[curLevel].length) {
+			invalidChildCount(curLevel, levels[curLevel]);
+		}
+
+		validateLevelsRec(curLevel + 1, countNonNulls(levels[curLevel]), levels);
+	}
+	
+	private static void validateNoDuplicates(List<?> data) {
+		if (data == null) {
+			return;
+		}
+		Set<Object> found = new HashSet<>();
+		for (Object da : data) {
+			// Nulls will be duplicated
+			if (da == null) {
 				continue;
 			}
-			for (Object o : level) {
-				if (o == null)
-					continue;
-				if (found.contains(o)) {
-					return true;
-				}
-				found.add(o);
+			if (!found.contains(da)) {
+				found.add(da);
+				continue;
 			}
+			invalidDuplicate(da);
 		}
-		return false;
 	}
 
-	/*
-	 * Creates the root node
-	 */
-	private static <E extends Comparable<? super E>> Node<E> buildRoot(E[] level0) {
-		if (level0 == null || !hasProperLevelCount(0, level0))
-			throw new IllegalArgumentException("The input list has the wrong amount of elements for level 0.");
-		return new Node<E>(level0[0]);
-	}
-
-	private static boolean hasProperChildCount(int numParents, Object[] children) {
-		return children != null && children.length == (numParents * 2);
-	}
-
-	/*
-	 * Checks whether the given list has the proper number of elements for that
-	 * level.
-	 */
-	private static boolean hasProperLevelCount(int level, Object[] eles) {
-		return eles != null && eles.length == getProperLevelCount(level);
-	}
-
-	/*
-	 * Returns how many elements would be in the full tree at the given level.
-	 * I.e. level 0 has 1 node, 1 has 2 nodes, 2 has 4 nodes, etc
-	 */
-	private static int getProperLevelCount(int level) {
-		return (int) Math.pow(2, level);
-	}
-
-	/*
-	 * Each parent should have all their children defined, even if they're null
-	 */
+	// 2 children for every parent
 	private static int getProperChildCount(int parentCount) {
 		return parentCount * 2;
 	}
 
-	/**
-	 * Builds the tree recursively, with the given nodes
-	 * 
-	 * @param previousNodes
-	 *            All the nodes (including nulls) from the previous level
-	 * @param curLevel
-	 *            Which index our current level is at
-	 * @param levels
-	 *            All the levels to build from
+	private static int countNonNulls(Object[] children) {
+		int count = 0;
+		for (Object o : children) {
+			if (o != null) {
+				++count;
+			}
+		}
+		return count;
+	}
+
+	/*
+	 * Converts the 2D array into a 1D list
 	 */
-	private static <E extends Comparable<? super E>> void buildTree(List<Node<E>> prevNodes, int curLevel, E[][] levels) {
-		// Base case
-		if (curLevel == levels.length) {
+	private static <E extends Comparable<? super E>> List<E> flatten(E[][] arr) {
+		List<E> ret = new LinkedList<>();
+		if (arr == null) {
+			return ret;
+		}
+
+		for (E[] innerArr : arr) {
+			if (innerArr == null) {
+				continue;
+			}
+			ret.addAll(Arrays.asList(innerArr));
+		}
+
+		return ret;
+	}
+
+	/*
+	 * Converts the level order list to a BST. Since a Level order traversal is
+	 * created using a Queue (and not recursion), it makes sense to use a Queue
+	 * to build the tree as well.
+	 */
+	private static <E extends Comparable<? super E>> BST<E> buildTree(List<E> eles) {
+		// Create our starting point
+		Node<E> root = new Node<>(eles.get(0));
+		Queue<Node<E>> q = new LinkedList<>();
+		q.offer(root);
+
+		// Where we're getting the data
+		int dataIndex = 1;
+		while (!q.isEmpty()) {
+			// The node we're building now
+			Node<E> curNode = q.poll();
+
+			Node<E> left = (dataIndex >= eles.size() || eles.get(dataIndex) == null) ? null : new Node<>(eles.get(dataIndex));
+			Node<E> right = (dataIndex >= eles.size() || eles.get(dataIndex + 1) == null) ? null : new Node<>(eles.get(dataIndex + 1));
+
+			validateLeft(curNode, left);
+			validateRight(curNode, right);
+
+			if (left != null) {
+				curNode.setLeft(left);
+				left.setParent(curNode);
+				q.offer(left);
+			}
+
+			if (right != null) {
+				curNode.setRight(right);
+				right.setParent(curNode);
+				q.offer(right);
+			}
+
+			dataIndex += 2;
+		}
+
+		return new BST<>(root, countNonNulls(eles.toArray()));
+	}
+
+	private static <E extends Comparable<? super E>> void validateLeft(Node<E> parent, Node<E> left) {
+		if (left == null) {
 			return;
 		}
 
-		// Error case
-		if (!hasProperChildCount(prevNodes.size(), levels[curLevel])) {
-			invalidChildCount(prevNodes, levels[curLevel]);
-		}
-
-		// If it's no an error, move on
-		List<Node<E>> curNodes = buildCurrentLevel(prevNodes, curLevel, levels);
-
-		// Recurse
-		buildTree(curNodes, ++curLevel, levels);
-	}
-
-	/*
-	 * Builds all the nodes for the current level. Returns an array of the nodes
-	 * that were created.
-	 */
-	private static <E extends Comparable<? super E>> List<Node<E>> buildCurrentLevel(List<Node<E>> prevNodes, int curLevel, E[][] levels) {
-		List<Node<E>> newNodes = new ArrayList<>();
-		// Loop thru all the previous nodes
-		int childNum = 0;
-		for (Node<E> prevNode : prevNodes) {
-			// Grab the data, post increment to update childNum too 
-			E left = levels[curLevel][childNum++];
-			E right = levels[curLevel][childNum++];
-
-			// Check that it's not an invalid BST
-			if (!(left == null || left != null && validLeft(left, prevNode.getData()))) {
-				invalidBST(prevNode.getData(), left, right);
-			}
-			if (!(right == null || right != null && validRight(right, prevNode.getData()))) {
-				invalidBST(prevNode.getData(), left, right);
-			}
-
-			// Add the new nodes
-			Node<E> lNode = left != null ? new Node<E>(left) : null;
-			Node<E> rNode = right != null ? new Node<E>(right) : null;
-			linkInNodes(prevNode, lNode, rNode);
-
-			// We only add non-null stuff so if one of prevNode's children are null, we just skip them later down the tree
-			if (lNode != null) {
-				newNodes.add(lNode);
-			}
-			if (rNode != null) {
-				newNodes.add(rNode);
-			}
-		}
-		return newNodes;
-	}
-
-	// Checks to make sure that left is < parent and right is > parent
-	private static <E extends Comparable<? super E>> boolean validLeft(E left, E parent) {
-		return left.compareTo(parent) < 0;
-	}
-
-	// Checks to make sure that left is < parent and right is > parent
-	private static <E extends Comparable<? super E>> boolean validRight(E right, E parent) {
-		return right.compareTo(parent) > 0;
-	}
-
-	// Sets up the links between parent and children
-	private static <E extends Comparable<? super E>> void linkInNodes(Node<E> parent, Node<E> left, Node<E> right) {
-		parent.setLeft(left);
-		parent.setRight(right);
-		if (left != null) {
-			left.setParent(parent);
-		}
-		if (right != null) {
-			right.setParent(parent);
+		if (left.getData().compareTo(parent.getData()) >= 0) {
+			invalidLeft(parent.getData(), left.getData());
 		}
 	}
 
-	/*
-	 * Counts all the non null elements in levels
-	 */
-	private static int countSize(Object[][] levels) {
-		int size = 0;
-		for (Object[] level : levels) {
-			if (level == null) {
-				continue;
-			}
-			for (Object obj : level) {
-				if (obj != null) {
-					++size;
-				}
-			}
+	private static <E extends Comparable<? super E>> void validateRight(Node<E> parent, Node<E> right) {
+		if (right == null) {
+			return;
 		}
-		return size;
+
+		if (right.getData().compareTo(parent.getData()) <= 0) {
+			invalidRight(parent.getData(), right.getData());
+		}
 	}
 
 	/*
@@ -217,18 +201,20 @@ public class BSTBuilder {
 	 * Exceptions
 	 * ----------------------------------------------------------------
 	 */
-	private static void invalidChildCount(List<?> parents, Object[] children) {
-		throw new IllegalArgumentException(String.format(
-				"Invalid number of children for the number of parents. Was: %d, Expected: %d. Parents: %s, Children: %s", children.length,
-				getProperChildCount(parents.size()), parents, Arrays.toString(children)));
+	private static void invalidChildCount(int level, Object[] children) {
+		throw new IllegalArgumentException(String.format("Invalid number of children for level: %d. Children were: %s", level,
+				Arrays.toString(children)));
+	}
+	
+	private static void invalidDuplicate(Object data) {
+		throw new IllegalArgumentException(String.format("Found duplicated data: ", data));
 	}
 
-	private static void invalidBST(Object parent, Object left, Object right) {
-		throw new IllegalArgumentException(
-				String.format("Tried to build invalid BST! Parent: %s, Left: %s, Right: %s", parent, left, right));
+	private static void invalidLeft(Object parent, Object left) {
+		throw new IllegalArgumentException(String.format("Tried to build an invalid BST! Parent: %s, Left: %s"));
 	}
 
-	private static void duplicateValues() {
-		throw new IllegalArgumentException("Tried to make a BST with duplicate values");
+	private static void invalidRight(Object parent, Object right) {
+		throw new IllegalArgumentException(String.format("Tried to build an invalid BST! Parent: %s, Right: %s"));
 	}
 }
