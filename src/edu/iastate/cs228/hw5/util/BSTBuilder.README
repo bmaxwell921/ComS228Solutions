@@ -1,0 +1,94 @@
+===============================================================================
+Overview
+===============================================================================
+Hello! Since the BSTBuilder is fairly complicated in its use, I thought I would add a readme rather than solely relying on Javadocs.
+
+As its name implies, the BSTBuilder is a utility that you can use to build BST objects. The parameter you pass in is simply a
+2D array of the data that you want in the resultant tree, level by level. It will read the array top to bottom (relative to the tree)
+and left to right. See Ex1, Ex2, Ex3, Ex4
+
+In order to have Nodes with null left or right children, you have to put a null into the array. Do not add children for a null Node. - Ex3 and Ex4
+
+You are not required to provide the last level (ie one full of nulls). If you do, then you must provide all necessary values for
+the level above. - Ex1 vs Ex2, Ex3 vs Ex4, Ex9
+
+Feel free to check out the BSTBuilderTest class for additional usage.
+
+If you find bugs or have questions, email me a bmaxwell921@gmail.com and I will fix them as soon as possible.
+
+===============================================================================
+Exceptions
+===============================================================================
+The BSTBuilder throws IllegalArgumentException when you provide invalid input:
+	- If you don't provide enough data for a level in the tree. - Ex5
+	- If you provide too much data for a level in the tree. - Ex6
+	- If the provided data would build a BST where a parent's left child has data that is larger than the parent's data. - Ex7
+	- If the provided data would build a BST where a parent's right child has data that is smaller than the parent's data. - Ex7
+	- If the provided data has duplicated, non-null values. - Ex8
+
+===============================================================================
+Examples
+===============================================================================
+Note: I use inline array creation for all the examples. I think it's easier to read, and it's much easier to code quickly.
+	If you're not familiar with this idea, Google it. Also, the Resultant Tree is shown in pseudo-toString formation, I'm explicitly 
+	showing null children.
+
+	- Ex1: Normal case, leaving off last level of nulls
+		Code: BSTBuilder.buildBST(new String[][] { { "B" }, { "A", "C" } });
+		Tree:
+			+ B
+				- A
+					- null
+					- null
+				- C
+					- null
+					- null
+	
+	- Ex2: Normal case, explicitly stating last level of nulls
+		Code: BSTBuilder.buildBST(new String[][] { { "B" }, { "A", "C" }, { null, null, null, null });
+		Tree:
+			+ B
+				- A
+					- null
+					- null
+				- C
+					- null
+					- null
+	
+	- Ex3: Normal case, tree with 'hole' in it. Leaving off last level of nulls
+		Code: BSTBuilder.buildBST(new String[][] { { "B" }, { null, "C" } });
+		Tree:
+			+ B
+				- null
+				- C
+					- null
+					- null
+
+	- Ex4: Normal case, tree with 'hole' in it. Explicitly stating last level of nulls. Note that the 2 null's in level 2 are for C's children.
+		Code: BSTBuilder.buildBST(new String[][] { { "B" }, { null, "C" }, { null, null } });
+		Tree:
+			+ B
+				- null
+				- C
+					- null
+					- null
+
+	- Ex5: Invalid case, not providing enough data for a level. Note how we didn't specific B's right child
+		Code: BSTBuilder.buildBST(new String[][] { { "B" }, { "A"} });
+		Tree: None. IllegalArgumentException is thrown.
+
+	- Ex6: Invalid case, providing too much data for a level.
+		Code: BSTBuilder.buildBST(new String[][] { { "B" }, { "A", "C", "D" } });
+		Tree: None. IllegalArgumentException is thrown.
+
+	- Ex7: Invalid case, trying to build a BST which violates BST ordering. Not how we're trying to set B's left as C, which is bigger than B.
+		Code: BSTBuilder.buildBST(new String[][] { { "B" }, { "C", "A" } });
+		Tree: None. IllegalArgumentException is thrown.
+
+	- Ex8: Invalid case, trying to build a BST with duplicates
+		Code: Code: BSTBuilder.buildBST(new String[][] { { "B" }, { "A", "B" }, { "A", "C", "C", "A" } });
+		Tree: None. IllegalArgumentException is thrown. Note, the message in the IllegalArgumentException will show which elements were duplicated.
+
+	- Ex9: Invalid case, partially filling in last level. Note, you have to provide all null values if you provide one.
+		Code: BSTBuilder.buildBST(new String[][] { { "B" }, { "A", "C" }, { null, null } });
+		Tree: None. IllegalArgumentException is thrown.
