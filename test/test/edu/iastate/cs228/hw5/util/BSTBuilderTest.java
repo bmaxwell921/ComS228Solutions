@@ -18,10 +18,12 @@ public class BSTBuilderTest {
 	private static final int timeout = 200000;
 
 	/*
-	 * Naming: Small tree - Depth 1 Medium tree - Depth 2 Large tree - Depth 3
+	 * Naming: Small tree - Depth 1, Medium tree - Depth 2, Large tree - Depth 3
 	 * 
-	 * Implicit - Don't provide the last level of all nulls Explicit - Do
+	 * Implicit - Don't provide the last level of all nulls, Explicit - Do
 	 * provide last level of all nulls
+	 * 
+	 * Not Enough Data - A level doesn't have enough children for the number of parents
 	 */
 
 	@Test(timeout = timeout)
@@ -110,29 +112,64 @@ public class BSTBuilderTest {
 		buildAndTest(new String[][] { { "H" }, { "D", "L" }, { "B", null, "J", "N" }, { "A", "C", "I", "K", "M", "O" },
 				{ null, null, null, null, null, null, null, null, null, null, null, null } });
 	}
-	
+
 	// No tests for multi-hole small trees since they're just roots
-	
+
 	@Test(timeout = timeout)
 	public void testMultiHoleTreeMedium_Implicit() {
-		buildAndTest(new String[][] {{"D"}, {null, "F"}, {null, "G"}});
-	}
-	
-	@Test(timeout = timeout)
-	public void testMultiHoleTreeMedium_Explicit() {
-		buildAndTest(new String[][] {{"D"}, {null, "F"}, {null, "G"}, {null, null}});
-	}
-	
-	@Test(timeout = timeout)
-	public void testMultiHoleTreeLarge_Implicit() {
-		buildAndTest(new String[][] {{"H"}, {null, "L"}, {"J", null}, {"I", null}});
-	}
-	
-	@Test(timeout = timeout)
-	public void testMultiHoleTreeLarge_Explicit() {
-		buildAndTest(new String[][] {{"H"}, {null, "L"}, {"J", null}, {"I", null}, {null, null}});
+		buildAndTest(new String[][] { { "D" }, { null, "F" }, { null, "G" } });
 	}
 
+	@Test(timeout = timeout)
+	public void testMultiHoleTreeMedium_Explicit() {
+		buildAndTest(new String[][] { { "D" }, { null, "F" }, { null, "G" }, { null, null } });
+	}
+
+	@Test(timeout = timeout)
+	public void testMultiHoleTreeLarge_Implicit() {
+		buildAndTest(new String[][] { { "H" }, { null, "L" }, { "J", null }, { "I", null } });
+	}
+
+	@Test(timeout = timeout)
+	public void testMultiHoleTreeLarge_Explicit() {
+		buildAndTest(new String[][] { { "H" }, { null, "L" }, { "J", null }, { "I", null }, { null, null } });
+	}
+
+	/*
+	 * Error checks
+	 */
+	
+	@Test(timeout = timeout, expected = IllegalArgumentException.class)
+	public void testSmallTreeNotEnoughData_Implicit() {
+		buildAndTest(new String[][] {{"B"}, {"A"}});
+	}
+	
+	@Test(timeout = timeout, expected = IllegalArgumentException.class)
+	public void testSmallTreeNotEnoughData_Explicit() {
+		buildAndTest(new String[][] {{"B"}, {"A"}, {null, null}});
+	}
+	
+	@Test(timeout = timeout, expected = IllegalArgumentException.class)
+	public void testMediumTreeNotEnoughData_Implicit() {
+		buildAndTest(new String[][] {{"D"}, {"B", "F"}, {"A"}});
+	}
+	
+	@Test(timeout = timeout, expected = IllegalArgumentException.class)
+	public void testMediumTreeNotEnoughData_Explicit() {
+		buildAndTest(new String[][] {{"D"}, {"B", "F"}, {"A"}, {null, null}});
+	}
+	
+	@Test(timeout = timeout, expected = IllegalArgumentException.class)
+	public void testLargeTreeNotEnoughData_Implicit() {
+		buildAndTest(new String[][] { { "H" }, { "D", "L" }, { "F", "J", "N" }, { "E", "G", "I", "K", "M", "O" } });
+	}
+	
+	@Test(timeout = timeout, expected = IllegalArgumentException.class)
+	public void testLargeTreeNotEnoughData_Explicit() {
+		buildAndTest(new String[][] { { "H" }, { "D", "L" }, { "F", "J", "N" }, {"E", "G", "I", "K", "M", "O" },
+				{ null, null, null, null, null, null, null, null, null, null, null, null }});
+	}
+	
 	private static <E extends Comparable<? super E>> void buildAndTest(E[][] data) {
 		BST<E> tree = BSTBuilder.buildBST(data);
 		Assert.assertFalse("BST should be created without cycles", BSTValidator.hasCycle(tree));
