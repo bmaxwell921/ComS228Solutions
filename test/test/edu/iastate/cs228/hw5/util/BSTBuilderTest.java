@@ -170,6 +170,38 @@ public class BSTBuilderTest {
 				{ null, null, null, null, null, null, null, null, null, null, null, null }});
 	}
 	
+	@Test(timeout = timeout, expected = IllegalArgumentException.class)
+	public void testSmallTreeTooMuchData_Implicit() {
+		buildAndTest(new String[][] {{"B"}, {"A", "C", "D"}});
+	}
+	
+	@Test(timeout = timeout, expected = IllegalArgumentException.class)
+	public void testSmallTreeTooMuchData_Explicit() {
+		buildAndTest(new String[][] {{"B"}, {"A", "C", "D"}, {null, null, null, null}});
+	}
+	
+	@Test(timeout = timeout, expected = IllegalArgumentException.class)
+	public void testMediumTreeTooMuchData_Implicit() {
+		buildAndTest(new String[][] { { "D" }, { "B", "F" }, { "A", "C", "E", "G", "H" } });
+	}
+
+	@Test(timeout = timeout, expected = IllegalArgumentException.class)
+	public void testMediumTreeTooMuchData_Explicit() {
+		buildAndTest(new String[][] { { "D" }, { "B", "F" }, { "A", "C", "E", "G", "H" }, { null, null, null, null, null, null, null, null } });
+	}
+
+	@Test(timeout = timeout, expected = IllegalArgumentException.class)
+	public void testFullTreeTooMuchData_Implicit() {
+		buildAndTest(new String[][] { { "H" }, { "D", "L" }, { "B", "F", "J", "N" }, { "A", "C", "E", "G", "I", "K", "M", "O", "P" } });
+	}
+
+	@Test(timeout = timeout, expected = IllegalArgumentException.class)
+	public void testFullTreeTooMuchData_Explicit() {
+		buildAndTest(new String[][] { { "H" }, { "D", "L" }, { "B", "F", "J", "N" }, { "A", "C", "E", "G", "I", "K", "M", "O", "P" },
+				{ null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null } });
+	}
+	
+	
 	private static <E extends Comparable<? super E>> void buildAndTest(E[][] data) {
 		BST<E> tree = BSTBuilder.buildBST(data);
 		Assert.assertFalse("BST should be created without cycles", BSTValidator.hasCycle(tree));
