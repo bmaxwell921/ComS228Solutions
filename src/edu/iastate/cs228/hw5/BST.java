@@ -1,19 +1,15 @@
 package edu.iastate.cs228.hw5;
-
-/**
- *  
- * @author
- *
- */
-
 import java.util.AbstractSet;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Iterator;
-import java.util.ArrayList;
-import java.lang.IllegalArgumentException;
+import java.util.List;
 
 /**
  * Binary search tree implementation
+ * @author Brandon
+ *
+ * @param <E>
  */
 public class BST<E extends Comparable<? super E>> extends AbstractSet<E> {
 	private Node<E> root;
@@ -120,11 +116,11 @@ public class BST<E extends Comparable<? super E>> extends AbstractSet<E> {
 	}
 
 	private int heightRec(Node<E> root) {
+		// -1 since the height of an empty tree is -1?
 		if (root == null) {
-			return 0;
+			return -1;
 		}
-		return 1 + Math.max(heightRec(root.getLeft()),
-				heightRec(root.getRight()));
+		return 1 + Math.max(heightRec(root.getLeft()), heightRec(root.getRight()));
 	}
 
 	/**
@@ -138,8 +134,12 @@ public class BST<E extends Comparable<? super E>> extends AbstractSet<E> {
 		if (size == 0) {
 			return null;
 		}
-		this.getInorderSequence(inorderArr);
-		return inorderArr.get(0);
+		Node<E> cur = root;
+		while (cur.getLeft() != null) {
+			cur = cur.getLeft();
+		}
+		
+		return cur.getData();
 	}
 
 	/**
@@ -153,8 +153,11 @@ public class BST<E extends Comparable<? super E>> extends AbstractSet<E> {
 		if (size == 0) {
 			return null;
 		}
-		this.getInorderSequence(inorderArr);
-		return inorderArr.get(inorderArr.size() - 1);
+		Node<E> cur = root;
+		while (cur.getRight() != null) {
+			cur = cur.getRight();
+		}
+		return cur.getData();
 	}
 
 	/**
@@ -164,20 +167,8 @@ public class BST<E extends Comparable<? super E>> extends AbstractSet<E> {
 	 *            array list to store the sequence
 	 */
 	public void getPreorderSequence(ArrayList<E> arr) {
-		if (!redoPreorder) {
-			arr.addAll(preorderArr);
-		}
-		preOrderRec(root, preorderArr);
+		traversePreorder();
 		arr.addAll(preorderArr);
-	}
-
-	private void preOrderRec(Node<E> root, ArrayList<E> arr) {
-		if (root == null) {
-			return;
-		}
-		arr.add(root.getData());
-		preOrderRec(root.getLeft(), arr);
-		preOrderRec(root.getRight(), arr);
 	}
 
 	/**
@@ -187,7 +178,8 @@ public class BST<E extends Comparable<? super E>> extends AbstractSet<E> {
 	 *            array list to store the sequence
 	 */
 	public void getInorderSequence(ArrayList<E> arr) {
-		// TODO
+		traverseInorder();
+		arr.addAll(inorderArr);
 	}
 
 	/**
@@ -197,7 +189,17 @@ public class BST<E extends Comparable<? super E>> extends AbstractSet<E> {
 	 *            array list to store the sequence
 	 */
 	public void getPostorderSequence(ArrayList<E> arr) {
-		// TODO
+		traversePostorder();
+		arr.addAll(postorderArr);
+	}
+	
+	private void postOrderRec(Node<E> root, ArrayList<E> arr) {
+		if (root == null) {
+			return;
+		}
+		postOrderRec(root.getLeft(), arr);
+		postOrderRec(root.getRight(), arr);
+		arr.add(root.getData());
 	}
 
 	// -----------
@@ -243,9 +245,20 @@ public class BST<E extends Comparable<? super E>> extends AbstractSet<E> {
 	 * No need to perform the traversal if redoPreorder == false.
 	 */
 	public String traversePreorder() {
-		// TODO
-
-		return null;
+		if (redoPreorder) {
+			preorderArr.clear();
+			preorderRec(root);
+		}
+		return listString(preorderArr);
+	}
+	
+	private void preorderRec(Node<E> root) {
+		if (root == null) {
+			return;
+		}
+		preorderArr.add(root.getData());
+		preorderRec(root.getLeft());
+		preorderRec(root.getRight());
 	}
 
 	/**
@@ -254,9 +267,20 @@ public class BST<E extends Comparable<? super E>> extends AbstractSet<E> {
 	 * false.
 	 */
 	public String traverseInorder() {
-		// TODO
-
-		return null;
+		if (redoInorder) {
+			inorderArr.clear();
+			inorderRec(root);
+		}
+		return listString(inorderArr);
+	}
+	
+	private void inorderRec(Node<E> root) {
+		if (root == null) {
+			return;
+		}
+		inorderRec(root.getLeft());
+		inorderArr.add(root.getData());
+		inorderRec(root.getRight());
 	}
 
 	/**
@@ -265,9 +289,32 @@ public class BST<E extends Comparable<? super E>> extends AbstractSet<E> {
 	 * == false.
 	 */
 	public String traversePostorder() {
-		// TODO
-
-		return null;
+		if (redoPostorder) {
+			postorderArr.clear();
+			postorderRec(root);
+		}
+		return listString(postorderArr);
+	}
+	
+	private void postorderRec(Node<E> root) {
+		if (root == null) {
+			return;
+		}
+		postorderRec(root.getLeft());
+		postorderRec(root.getRight());
+		postorderArr.add(root.getData());
+	}
+	
+	// Converts the given list to SSV - Space Separated Values
+	private String listString(List<E> list) {
+		if (list == null) {
+			return "";
+		}
+		StringBuilder ersber = new StringBuilder();
+		for (E derter : list) {
+			ersber.append(derter).append(" ");
+		}
+		return ersber.toString().trim();
 	}
 
 	// -------------
@@ -290,8 +337,7 @@ public class BST<E extends Comparable<? super E>> extends AbstractSet<E> {
 	 *            stores elements >= minValue and <= maxValue
 	 * @return number of elements in the interval [minValue, maxValue]
 	 */
-	public int rangeQuery(E minValue, E maxValue, E[] eleArray)
-			throws IllegalArgumentException {
+	public int rangeQuery(E minValue, E maxValue, E[] eleArray) throws IllegalArgumentException {
 		// TODO
 
 		return 0;
@@ -314,8 +360,7 @@ public class BST<E extends Comparable<? super E>> extends AbstractSet<E> {
 	 *            stores the found keys
 	 * @return
 	 */
-	public void orderQuery(int imin, int imax, E[] eleArray)
-			throws IllegalArgumentException {
+	public void orderQuery(int imin, int imax, E[] eleArray) throws IllegalArgumentException {
 		// TODO
 	}
 
