@@ -111,14 +111,26 @@ public class BSTBuilderTest {
 				{ null, null, null, null, null, null, null, null, null, null, null, null } });
 	}
 	
+	// No tests for multi-hole small trees since they're just roots
+	
 	@Test(timeout = timeout)
-	public void testMultiHoleTreeSmall_Implicit() {
+	public void testMultiHoleTreeMedium_Implicit() {
 		buildAndTest(new String[][] {{"D"}, {null, "F"}, {null, "G"}});
 	}
 	
 	@Test(timeout = timeout)
-	public void testMultiHoleTreeSmall_Explicit() {
+	public void testMultiHoleTreeMedium_Explicit() {
 		buildAndTest(new String[][] {{"D"}, {null, "F"}, {null, "G"}, {null, null}});
+	}
+	
+	@Test(timeout = timeout)
+	public void testMultiHoleTreeLarge_Implicit() {
+		buildAndTest(new String[][] {{"H"}, {null, "L"}, {"J", null}, {"I", null}});
+	}
+	
+	@Test(timeout = timeout)
+	public void testMultiHoleTreeLarge_Explicit() {
+		buildAndTest(new String[][] {{"H"}, {null, "L"}, {"J", null}, {"I", null}, {null, null}});
 	}
 
 	private static <E extends Comparable<? super E>> void buildAndTest(E[][] data) {
