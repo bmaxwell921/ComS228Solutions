@@ -26,6 +26,7 @@ public class BSTBuilder {
 	 * for detailed use.
 	 * 
 	 * @param levels
+	 * 		The data to put in the tree, level by level
 	 * @return The BST represented by the given List, or an empty tree if levels
 	 *         is null or empty
 	 * @throws IllegalArgumentException
@@ -41,10 +42,12 @@ public class BSTBuilder {
 			return new BST<E>(null, 0);
 		}
 
+		// Check for valid input
 		validateLevels(levels);
 		List<E> data = flatten(levels);
 		validateNoDuplicates(data);
 		
+		// If it's good, then go ahead
 		return buildTree(data);
 	}
 
@@ -116,7 +119,11 @@ public class BSTBuilder {
 		return parentCount * 2;
 	}
 
+	// Counts how many elements in children are not null
 	private static int countNonNulls(Object[] children) {
+		if (children == null) {
+			return 0;
+		}
 		int count = 0;
 		for (Object o : children) {
 			if (o != null) {
@@ -162,12 +169,15 @@ public class BSTBuilder {
 			// The node we're building now
 			Node<E> curNode = q.poll();
 
+			// Get the children, using null if we've run out of data, or if the data itself is null
 			Node<E> left = (dataIndex >= eles.size() || eles.get(dataIndex) == null) ? null : new Node<>(eles.get(dataIndex));
 			Node<E> right = (dataIndex >= eles.size() || eles.get(dataIndex + 1) == null) ? null : new Node<>(eles.get(dataIndex + 1));
 
+			// Check that we're not making an invalid BST
 			validateLeft(curNode, left);
 			validateRight(curNode, right);
 
+			// We only put non-null Nodes into the queue since nulls don't need their children set
 			if (left != null) {
 				curNode.setLeft(left);
 				left.setParent(curNode);
@@ -180,12 +190,14 @@ public class BSTBuilder {
 				q.offer(right);
 			}
 
+			// Used up 2 data elements
 			dataIndex += 2;
 		}
 
 		return new BST<>(root, countNonNulls(eles.toArray()));
 	}
 
+	// Checks that left.data < parent.data
 	private static <E extends Comparable<? super E>> void validateLeft(Node<E> parent, Node<E> left) {
 		if (left == null) {
 			return;
@@ -196,6 +208,7 @@ public class BSTBuilder {
 		}
 	}
 
+	// Checks that right.data > parent.data
 	private static <E extends Comparable<? super E>> void validateRight(Node<E> parent, Node<E> right) {
 		if (right == null) {
 			return;
