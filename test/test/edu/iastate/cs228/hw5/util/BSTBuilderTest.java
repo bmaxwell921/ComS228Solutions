@@ -15,7 +15,8 @@ import edu.iastate.cs228.hw5.util.BSTValidator;
  */
 public class BSTBuilderTest {
 
-	private static final int timeout = 200000000;
+	// Shouldn't really take that long to run the tests
+	private static final int timeout = 1000;
 
 	/*
 	 * Naming: Small tree - Depth 1, Medium tree - Depth 2, Large tree - Depth 3
