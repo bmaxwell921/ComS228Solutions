@@ -273,10 +273,14 @@ public class BSTBuilderTest {
 
 	private static <E extends Comparable<? super E>> void buildAndTest(E[][] data) {
 		BST<E> tree = BSTBuilder.buildBST(data);
+		/*
+		 *  I'm not going to provide the BSTValidator class since it would give away homework answers,
+		 *  but you should be able to figure out what each method does by its name.
+		 */
 		Assert.assertFalse("BST should be created without cycles", BSTValidator.hasCycle(tree));
 		Assert.assertTrue("BST should be created with the proper references", BSTValidator.hasProperRefs(tree));
 		Assert.assertTrue("BST should be created with the proper size", BSTValidator.hasProperSize(tree, data));
-		Assert.assertTrue("BST should be created with all the data", BSTValidator.hasAllData(tree, data));
+		Assert.assertTrue("BST should be created with all the data in the right place", BSTValidator.hasAllData(tree, data));
 	}
 
 }
