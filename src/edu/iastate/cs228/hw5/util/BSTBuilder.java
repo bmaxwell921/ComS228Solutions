@@ -83,11 +83,15 @@ public class BSTBuilder {
 		validateLevelsRec(curLevel + 1, countNonNulls(levels[curLevel]), levels);
 	}
 	
+	/*
+	 * Checks that there are no duplicates in data
+	 */
 	private static void validateNoDuplicates(List<?> data) {
 		if (data == null) {
 			return;
 		}
 		Set<Object> found = new HashSet<>();
+		Set<Object> dups = new HashSet<>();
 		for (Object da : data) {
 			// Nulls will be duplicated
 			if (da == null) {
@@ -96,8 +100,13 @@ public class BSTBuilder {
 			if (!found.contains(da)) {
 				found.add(da);
 				continue;
+			} else {
+				dups.add(da);
 			}
-			invalidDuplicate(da);
+		}
+		
+		if (!dups.isEmpty()) {
+			invalidDuplicates(dups);
 		}
 	}
 
@@ -206,8 +215,8 @@ public class BSTBuilder {
 				Arrays.toString(children)));
 	}
 	
-	private static void invalidDuplicate(Object data) {
-		throw new IllegalArgumentException(String.format("Found duplicated data: ", data));
+	private static void invalidDuplicates(Set<Object> dups) {
+		throw new IllegalArgumentException(String.format("Found duplicated data: %s", dups));
 	}
 
 	private static void invalidLeft(Object parent, Object left) {
