@@ -233,26 +233,41 @@ public class BSTBuilderTest {
 		buildAndTest(new String[][] { { "H" }, { "D", "L" }, { "B", "F", "J", "N" }, { "A", "C", "G", "E", "I", "K", "M", "O" },
 				{ null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null } });
 	}
-	
+
 	@Test(timeout = timeout, expected = IllegalArgumentException.class)
 	public void testSmallTree_ExplicitNotEnough() {
-		buildAndTest(new String[][] {{"B"}, {"A", "C"}, {null, null}});
+		buildAndTest(new String[][] { { "B" }, { "A", "C" }, { null, null } });
 	}
-	
+
 	@Test(timeout = timeout, expected = IllegalArgumentException.class)
 	public void testMediumTree_ExplicitNotEnough() {
-		buildAndTest(new String[][] {{"D"}, {"B", "F"}, {"A", "C", "E", "G"}, {null, null, null, null, null, null}});
+		buildAndTest(new String[][] { { "D" }, { "B", "F" }, { "A", "C", "E", "G" }, { null, null, null, null, null, null } });
 	}
-	
+
 	@Test(timeout = timeout, expected = IllegalArgumentException.class)
 	public void testLargeTree_ExplicitNotEnough() {
 		buildAndTest(new String[][] { { "H" }, { "D", "L" }, { "B", "F", "J", "N" }, { "A", "C", "E", "G", "I", "K", "M", "O" },
 				{ null, null, null, null, null, null, null, null, null, null, null, null, null, null, null } });
 	}
-	
-	@Test(timeout = timeout, expected = IllegalArgumentException.class)
+
+	@Test(timeout = timeout)
 	public void testLargeDuplicates() {
-		buildAndTest(new String[][] {{"H"}, {"D", "L"}, {"B", "F", "J", "N"}, {"A", "A", "A", "A", "A", "A", "A", "A"}});
+		try {
+			buildAndTest(new String[][] { { "H" }, { "D", "L" }, { "B", "F", "J", "N" }, { "A", "A", "A", "A", "A", "A", "A", "A" } });
+		} catch (IllegalArgumentException iae) {
+			Assert.assertTrue("When duplicates are found, it should say all of them.", iae.getMessage().contains("A"));
+		}
+	}
+
+	@Test(timeout = timeout)
+	public void testLargeMultiDuplicates() {
+		try {
+			buildAndTest(new String[][] { { "H" }, { "D", "L" }, { "B", "F", "J", "N" }, { "A", "A", "B", "B", "C", "C", "D", "D" } });
+		} catch (IllegalArgumentException iae) {
+			String msg = iae.getMessage();
+			Assert.assertTrue("When duplicates are found, it should say all of them.",
+					msg.contains("A") && msg.contains("B") && msg.contains("C") && msg.contains("D"));
+		}
 	}
 
 	private static <E extends Comparable<? super E>> void buildAndTest(E[][] data) {
