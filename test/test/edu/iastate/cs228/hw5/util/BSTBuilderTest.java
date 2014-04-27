@@ -15,7 +15,7 @@ import edu.iastate.cs228.hw5.util.BSTValidator;
  */
 public class BSTBuilderTest {
 
-	// Shouldn't really take that long to run the tests
+	// Shouldn't really take that long to run each test
 	private static final int timeout = 1000;
 
 	/*
