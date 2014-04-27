@@ -15,7 +15,7 @@ import edu.iastate.cs228.hw5.util.BSTValidator;
  */
 public class BSTBuilderTest {
 
-	private static final int timeout = 200000;
+	private static final int timeout = 200000000;
 
 	/*
 	 * Naming: Small tree - Depth 1, Medium tree - Depth 2, Large tree - Depth 3
@@ -248,6 +248,11 @@ public class BSTBuilderTest {
 	public void testLargeTree_ExplicitNotEnough() {
 		buildAndTest(new String[][] { { "H" }, { "D", "L" }, { "B", "F", "J", "N" }, { "A", "C", "E", "G", "I", "K", "M", "O" },
 				{ null, null, null, null, null, null, null, null, null, null, null, null, null, null, null } });
+	}
+	
+	@Test(timeout = timeout, expected = IllegalArgumentException.class)
+	public void testLargeDuplicates() {
+		buildAndTest(new String[][] {{"H"}, {"D", "L"}, {"B", "F", "J", "N"}, {"A", "A", "A", "A", "A", "A", "A", "A"}});
 	}
 
 	private static <E extends Comparable<? super E>> void buildAndTest(E[][] data) {
