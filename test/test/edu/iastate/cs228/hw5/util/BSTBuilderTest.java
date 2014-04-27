@@ -23,7 +23,8 @@ public class BSTBuilderTest {
 	 * Implicit - Don't provide the last level of all nulls, Explicit - Do
 	 * provide last level of all nulls
 	 * 
-	 * Not Enough Data - A level doesn't have enough children for the number of parents
+	 * Not Enough Data - A level doesn't have enough children for the number of
+	 * parents
 	 */
 
 	@Test(timeout = timeout)
@@ -138,48 +139,48 @@ public class BSTBuilderTest {
 	/*
 	 * Error checks
 	 */
-	
+
 	@Test(timeout = timeout, expected = IllegalArgumentException.class)
 	public void testSmallTreeNotEnoughData_Implicit() {
-		buildAndTest(new String[][] {{"B"}, {"A"}});
+		buildAndTest(new String[][] { { "B" }, { "A" } });
 	}
-	
+
 	@Test(timeout = timeout, expected = IllegalArgumentException.class)
 	public void testSmallTreeNotEnoughData_Explicit() {
-		buildAndTest(new String[][] {{"B"}, {"A"}, {null, null}});
+		buildAndTest(new String[][] { { "B" }, { "A" }, { null, null } });
 	}
-	
+
 	@Test(timeout = timeout, expected = IllegalArgumentException.class)
 	public void testMediumTreeNotEnoughData_Implicit() {
-		buildAndTest(new String[][] {{"D"}, {"B", "F"}, {"A"}});
+		buildAndTest(new String[][] { { "D" }, { "B", "F" }, { "A" } });
 	}
-	
+
 	@Test(timeout = timeout, expected = IllegalArgumentException.class)
 	public void testMediumTreeNotEnoughData_Explicit() {
-		buildAndTest(new String[][] {{"D"}, {"B", "F"}, {"A"}, {null, null}});
+		buildAndTest(new String[][] { { "D" }, { "B", "F" }, { "A" }, { null, null } });
 	}
-	
+
 	@Test(timeout = timeout, expected = IllegalArgumentException.class)
 	public void testLargeTreeNotEnoughData_Implicit() {
 		buildAndTest(new String[][] { { "H" }, { "D", "L" }, { "F", "J", "N" }, { "E", "G", "I", "K", "M", "O" } });
 	}
-	
+
 	@Test(timeout = timeout, expected = IllegalArgumentException.class)
 	public void testLargeTreeNotEnoughData_Explicit() {
-		buildAndTest(new String[][] { { "H" }, { "D", "L" }, { "F", "J", "N" }, {"E", "G", "I", "K", "M", "O" },
-				{ null, null, null, null, null, null, null, null, null, null, null, null }});
+		buildAndTest(new String[][] { { "H" }, { "D", "L" }, { "F", "J", "N" }, { "E", "G", "I", "K", "M", "O" },
+				{ null, null, null, null, null, null, null, null, null, null, null, null } });
 	}
-	
+
 	@Test(timeout = timeout, expected = IllegalArgumentException.class)
 	public void testSmallTreeTooMuchData_Implicit() {
-		buildAndTest(new String[][] {{"B"}, {"A", "C", "D"}});
+		buildAndTest(new String[][] { { "B" }, { "A", "C", "D" } });
 	}
-	
+
 	@Test(timeout = timeout, expected = IllegalArgumentException.class)
 	public void testSmallTreeTooMuchData_Explicit() {
-		buildAndTest(new String[][] {{"B"}, {"A", "C", "D"}, {null, null, null, null}});
+		buildAndTest(new String[][] { { "B" }, { "A", "C", "D" }, { null, null, null, null } });
 	}
-	
+
 	@Test(timeout = timeout, expected = IllegalArgumentException.class)
 	public void testMediumTreeTooMuchData_Implicit() {
 		buildAndTest(new String[][] { { "D" }, { "B", "F" }, { "A", "C", "E", "G", "H" } });
@@ -187,21 +188,68 @@ public class BSTBuilderTest {
 
 	@Test(timeout = timeout, expected = IllegalArgumentException.class)
 	public void testMediumTreeTooMuchData_Explicit() {
-		buildAndTest(new String[][] { { "D" }, { "B", "F" }, { "A", "C", "E", "G", "H" }, { null, null, null, null, null, null, null, null } });
+		buildAndTest(new String[][] { { "D" }, { "B", "F" }, { "A", "C", "E", "G", "H" },
+				{ null, null, null, null, null, null, null, null } });
 	}
 
 	@Test(timeout = timeout, expected = IllegalArgumentException.class)
-	public void testFullTreeTooMuchData_Implicit() {
+	public void testLargeTreeTooMuchData_Implicit() {
 		buildAndTest(new String[][] { { "H" }, { "D", "L" }, { "B", "F", "J", "N" }, { "A", "C", "E", "G", "I", "K", "M", "O", "P" } });
 	}
 
 	@Test(timeout = timeout, expected = IllegalArgumentException.class)
-	public void testFullTreeTooMuchData_Explicit() {
+	public void testLargeTreeTooMuchData_Explicit() {
 		buildAndTest(new String[][] { { "H" }, { "D", "L" }, { "B", "F", "J", "N" }, { "A", "C", "E", "G", "I", "K", "M", "O", "P" },
 				{ null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null } });
 	}
+
+	@Test(timeout = timeout, expected = IllegalArgumentException.class)
+	public void testSmallTreeNotBST_Implicit() {
+		buildAndTest(new String[][] { { "A" }, { "B", "C" } });
+	}
+
+	@Test(timeout = timeout, expected = IllegalArgumentException.class)
+	public void testSmallTreeNotBST_Explicit() {
+		buildAndTest(new String[][] { { "A" }, { "B", "C" }, { null, null, null, null } });
+	}
+
+	@Test(timeout = timeout, expected = IllegalArgumentException.class)
+	public void testMediumTreeNotBST_Implicit() {
+		buildAndTest(new String[][] { { "D" }, { "B", "F" }, { "A", "C", "G", "E" } });
+	}
+
+	@Test(timeout = timeout, expected = IllegalArgumentException.class)
+	public void testMediumTreeNotBST_Explicit() {
+		buildAndTest(new String[][] { { "D" }, { "B", "F" }, { "A", "C", "G", "E" }, { null, null, null, null, null, null, null, null } });
+	}
+
+	@Test(timeout = timeout, expected = IllegalArgumentException.class)
+	public void testLargeTreeNotBST_Implicit() {
+		buildAndTest(new String[][] { { "H" }, { "D", "L" }, { "B", "F", "J", "N" }, { "A", "C", "G", "E", "I", "K", "M", "O" } });
+	}
+
+	@Test(timeout = timeout, expected = IllegalArgumentException.class)
+	public void testLargeTreeNotBST_Explicit() {
+		buildAndTest(new String[][] { { "H" }, { "D", "L" }, { "B", "F", "J", "N" }, { "A", "C", "G", "E", "I", "K", "M", "O" },
+				{ null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null } });
+	}
 	
+	@Test(timeout = timeout, expected = IllegalArgumentException.class)
+	public void testSmallTree_ExplicitNotEnough() {
+		buildAndTest(new String[][] {{"B"}, {"A", "C"}, {null, null}});
+	}
 	
+	@Test(timeout = timeout, expected = IllegalArgumentException.class)
+	public void testMediumTree_ExplicitNotEnough() {
+		buildAndTest(new String[][] {{"D"}, {"B", "F"}, {"A", "C", "E", "G"}, {null, null, null, null, null, null}});
+	}
+	
+	@Test(timeout = timeout, expected = IllegalArgumentException.class)
+	public void testLargeTree_ExplicitNotEnough() {
+		buildAndTest(new String[][] { { "H" }, { "D", "L" }, { "B", "F", "J", "N" }, { "A", "C", "E", "G", "I", "K", "M", "O" },
+				{ null, null, null, null, null, null, null, null, null, null, null, null, null, null, null } });
+	}
+
 	private static <E extends Comparable<? super E>> void buildAndTest(E[][] data) {
 		BST<E> tree = BSTBuilder.buildBST(data);
 		Assert.assertFalse("BST should be created without cycles", BSTValidator.hasCycle(tree));
