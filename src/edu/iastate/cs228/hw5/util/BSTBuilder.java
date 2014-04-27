@@ -11,7 +11,8 @@ import edu.iastate.cs228.hw5.BST;
 import edu.iastate.cs228.hw5.Node;
 
 /**
- * Utility class used to build BSTs
+ * Utility class used to build BSTs.
+ * Check the included README for details on how to use it
  * 
  * @author Brandon
  * 
