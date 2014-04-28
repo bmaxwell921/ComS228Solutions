@@ -26,65 +26,65 @@ public class BSTTest {
 	// The test tree
 	private BST<String> tree;
 
-	@Test
+	@Test (timeout = timeout)
 	public void testDefaultCons() {
 		tree = new BST<>();
 		testTree(new String[][] {});
 	}
 
-	@Test
+	@Test (timeout = timeout)
 	public void testSpecificCons_Empty() {
 		tree = new BST<>(new String[] {});
 		testTree(new String[][] {});
 	}
 
-	@Test
+	@Test (timeout = timeout)
 	public void testSpecificCons_Small() {
 		tree = new BST<>(new String[] { "B", "A", "C" });
 		testTree(new String[][] { { "B" }, { "A", "C" } });
 	}
 
-	@Test
+	@Test (timeout = timeout)
 	public void testSpecificCons_Medium() {
 		tree = new BST<>(new String[] { "D", "B", "F", "A", "C", "E", "G" });
 		testTree(new String[][] { { "D" }, { "B", "F" }, { "A", "C", "E", "G" } });
 	}
 
-	@Test
+	@Test (timeout = timeout)
 	public void testSpecificCons_Large() {
 		tree = new BST<>(new String[] { "H", "D", "L", "B", "F", "J", "N", "A", "C", "E", "G", "I", "K", "M", "O" });
 		testTree(new String[][] { { "H" }, { "D", "L" }, { "B", "F", "J", "N" }, { "A", "C", "E", "G", "I", "K", "M", "O" } });
 	}
 
-	@Test
+	@Test (timeout = timeout)
 	public void testCopyCons_Empty() throws TreeStructureException {
 		Node<String> oRoot = null;
 		tree = new BST<>(oRoot);
 		testTree(new String[][] {});
 	}
 
-	@Test
+	@Test (timeout = timeout)
 	public void testCopyCons_Small() throws TreeStructureException {
 		Node<String> oRoot = buildSmallTree().getRoot();
 		tree = new BST<>(oRoot);
 		testTree(new String[][] { { "B" }, { "A", "C" } });
 	}
 
-	@Test
+	@Test (timeout = timeout)
 	public void testCopyCons_Medium() throws TreeStructureException {
 		Node<String> oRoot = buildMediumTree().getRoot();
 		tree = new BST<>(oRoot);
 		testTree(new String[][] { { "D" }, { "B", "F" }, { "A", "C", "E", "G" } });
 	}
 
-	@Test
+	@Test (timeout = timeout)
 	public void testCopyCons_Large() throws TreeStructureException {
 		Node<String> oRoot = buildLargeTree().getRoot();
 		tree = new BST<>(oRoot);
 		testTree(new String[][] { { "H" }, { "D", "L" }, { "B", "F", "J", "N" }, { "A", "C", "E", "G", "I", "K", "M", "O" } });
 	}
 
-	@Test
+	@Test (timeout = timeout)
 	public void testCopyConsHoles_Medium() throws TreeStructureException {
 		String[][] input = new String[][] { { "D" }, { null, "F" }, { null, "G" } };
 		Node<String> oRoot = BSTBuilder.buildBST(input).getRoot();
@@ -92,7 +92,7 @@ public class BSTTest {
 		testTree(input);
 	}
 
-	@Test
+	@Test (timeout = timeout)
 	public void testCopyConsHoles_Large() throws TreeStructureException {
 		String[][] input = new String[][] { { "H" }, { null, "L" }, { "J", null }, { "I", null } };
 		Node<String> oRoot = BSTBuilder.buildBST(input).getRoot();
@@ -100,7 +100,7 @@ public class BSTTest {
 		testTree(input);
 	}
 
-	@Test(expected = TreeStructureException.class)
+	@Test (timeout = timeout, expected = TreeStructureException.class)
 	public void testCopyConsNotBST_Small() throws TreeStructureException {
 		Node<String> oRoot = new Node<>("A");
 		Node<String> left = new Node<>("B");
@@ -114,80 +114,80 @@ public class BSTTest {
 		tree = new BST<>(oRoot);
 	}
 
-	@Test
+	@Test (timeout = timeout)
 	public void testHeight_Empty() {
 		// DON'T PUT THIS IN THE REAL TESTS!
 		tree = buildEmpty();
 		Assert.assertEquals(-1, tree.height());
 	}
 
-	@Test
+	@Test (timeout = timeout)
 	public void testHeight_Small() {
 		tree = buildSmallTree();
 		Assert.assertEquals(1, tree.height());
 	}
 
-	@Test
+	@Test (timeout = timeout)
 	public void testHeight_Medium() {
 		tree = buildMediumTree();
 		Assert.assertEquals(2, tree.height());
 	}
 
-	@Test
+	@Test (timeout = timeout)
 	public void testHeight_Large() {
 		tree = buildLargeTree();
 		Assert.assertEquals(3, tree.height());
 	}
 
-	@Test
+	@Test (timeout = timeout)
 	public void testMin_Empty() {
 		tree = buildEmpty();
 		Assert.assertNull(tree.min());
 	}
 
-	@Test
+	@Test (timeout = timeout)
 	public void testMin_Small() {
 		tree = buildSmallTree();
 		Assert.assertEquals("A", tree.min());
 	}
 
-	@Test
+	@Test (timeout = timeout)
 	public void testMin_Medium() {
 		tree = buildMediumTree();
 		Assert.assertEquals("A", tree.min());
 	}
 
-	@Test
+	@Test (timeout = timeout)
 	public void testMin_Large() {
 		tree = buildLargeTree();
 		Assert.assertEquals("A", tree.min());
 	}
 
-	@Test
+	@Test (timeout = timeout)
 	public void testMax_Empty() {
 		tree = buildEmpty();
 		Assert.assertNull(tree.max());
 	}
 
-	@Test
+	@Test (timeout = timeout)
 	public void testMax_Small() {
 		tree = buildSmallTree();
 		Assert.assertEquals("C", tree.max());
 	}
 
-	@Test
+	@Test (timeout = timeout)
 	public void testMax_Medium() {
 		tree = buildMediumTree();
 		Assert.assertEquals("G", tree.max());
 	}
 
-	@Test
+	@Test (timeout = timeout)
 	public void testMax_Large() {
 		tree = buildLargeTree();
 		Assert.assertEquals("O", tree.max());
 	}
 
-	@Test
+	@Test (timeout = timeout)
 	public void testPreorderSeq_Empty() {
 		ArrayList<String> seq = new ArrayList<>();
 		tree = buildEmpty();
@@ -195,7 +195,7 @@ public class BSTTest {
 		Assert.assertTrue(seq.isEmpty());
 	}
 
-	@Test
+	@Test (timeout = timeout)
 	public void testPreorderSeq_Small() {
 		ArrayList<String> seq = new ArrayList<>();
 		ArrayList<String> correct = new ArrayList<>(Arrays.asList(new String[] { "B", "A", "C" }));
@@ -204,7 +204,7 @@ public class BSTTest {
 		Assert.assertEquals(correct, seq);
 	}
 
-	@Test
+	@Test (timeout = timeout)
 	public void testPreorderSeq_Medium() {
 		ArrayList<String> seq = new ArrayList<>();
 		ArrayList<String> correct = new ArrayList<>(Arrays.asList(new String[] { "D", "B", "A", "C", "F", "E", "G" }));
@@ -213,7 +213,7 @@ public class BSTTest {
 		Assert.assertEquals(correct, seq);
 	}
 
-	@Test
+	@Test (timeout = timeout)
 	public void testPreorderSeq_Large() {
 		ArrayList<String> seq = new ArrayList<>();
 		ArrayList<String> correct = new ArrayList<>(Arrays.asList(new String[] { "H", "D", "B", "A", "C", "F", "E", "G", "L", "J", "I",
@@ -223,7 +223,7 @@ public class BSTTest {
 		Assert.assertEquals(correct, seq);
 	}
 
-	@Test
+	@Test (timeout = timeout)
 	public void testInorderSeq_Empty() {
 		ArrayList<String> seq = new ArrayList<>();
 		tree = buildEmpty();
@@ -231,7 +231,7 @@ public class BSTTest {
 		Assert.assertTrue(seq.isEmpty());
 	}
 
-	@Test
+	@Test (timeout = timeout)
 	public void testInorderSeq_Small() {
 		ArrayList<String> seq = new ArrayList<>();
 		ArrayList<String> correct = new ArrayList<>(Arrays.asList(new String[] { "A", "B", "C" }));
@@ -240,7 +240,7 @@ public class BSTTest {
 		Assert.assertEquals(correct, seq);
 	}
 
-	@Test
+	@Test (timeout = timeout)
 	public void testInorderSeq_Medium() {
 		ArrayList<String> seq = new ArrayList<>();
 		ArrayList<String> correct = new ArrayList<>(Arrays.asList(new String[] { "A", "B", "C", "D", "E", "F", "G" }));
@@ -249,7 +249,7 @@ public class BSTTest {
 		Assert.assertEquals(correct, seq);
 	}
 
-	@Test
+	@Test (timeout = timeout)
 	public void testInorderSeq_Large() {
 		ArrayList<String> seq = new ArrayList<>();
 		ArrayList<String> correct = new ArrayList<>(Arrays.asList(new String[] { "A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K",
@@ -259,7 +259,7 @@ public class BSTTest {
 		Assert.assertEquals(correct, seq);
 	}
 
-	@Test
+	@Test (timeout = timeout)
 	public void testPostorderSeq_Empty() {
 		ArrayList<String> seq = new ArrayList<>();
 		tree = buildEmpty();
@@ -267,7 +267,7 @@ public class BSTTest {
 		Assert.assertTrue(seq.isEmpty());
 	}
 
-	@Test
+	@Test (timeout = timeout)
 	public void testPostorderSeq_Small() {
 		ArrayList<String> seq = new ArrayList<>();
 		ArrayList<String> correct = new ArrayList<>(Arrays.asList(new String[] { "A", "C", "B" }));
@@ -276,7 +276,7 @@ public class BSTTest {
 		Assert.assertEquals(correct, seq);
 	}
 
-	@Test
+	@Test (timeout = timeout)
 	public void testPostorderSeq_Medium() {
 		ArrayList<String> seq = new ArrayList<>();
 		ArrayList<String> correct = new ArrayList<>(Arrays.asList(new String[] { "A", "C", "B", "E", "G", "F", "D" }));
@@ -285,7 +285,7 @@ public class BSTTest {
 		Assert.assertEquals(correct, seq);
 	}
 
-	@Test
+	@Test (timeout = timeout)
 	public void testPostorderSeq_Large() {
 		ArrayList<String> seq = new ArrayList<>();
 		ArrayList<String> correct = new ArrayList<>(Arrays.asList(new String[] { "A", "C", "B", "E", "G", "F", "D", "I", "K", "J", "M",
@@ -295,91 +295,91 @@ public class BSTTest {
 		Assert.assertEquals(correct, seq);
 	}
 
-	@Test
+	@Test (timeout = timeout)
 	public void testTraversePre_Empty() {
 		String correct = "";
 		tree = buildEmpty();
 		Assert.assertEquals(correct, tree.traversePreorder().trim());
 	}
 
-	@Test
+	@Test (timeout = timeout)
 	public void testTraversePre_Small() {
 		String correct = "B A C";
 		tree = buildSmallTree();
 		Assert.assertEquals(correct, tree.traversePreorder().trim());
 	}
 
-	@Test
+	@Test (timeout = timeout)
 	public void testTraversePre_Medium() {
 		String correct = "D B A C F E G";
 		tree = buildMediumTree();
 		Assert.assertEquals(correct, tree.traversePreorder().trim());
 	}
 
-	@Test
+	@Test (timeout = timeout)
 	public void testTraversePre_Large() {
 		String correct = "H D B A C F E G L J I K N M O";
 		tree = buildLargeTree();
 		Assert.assertEquals(correct, tree.traversePreorder().trim());
 	}
 
-	@Test
+	@Test (timeout = timeout)
 	public void testTraverseIn_Empty() {
 		String correct = "";
 		tree = buildEmpty();
 		Assert.assertEquals(correct, tree.traverseInorder().trim());
 	}
 
-	@Test
+	@Test (timeout = timeout)
 	public void testTraverseIn_Small() {
 		String correct = "A B C";
 		tree = buildSmallTree();
 		Assert.assertEquals(correct, tree.traverseInorder().trim());
 	}
 
-	@Test
+	@Test (timeout = timeout)
 	public void testTraverseIn_Medium() {
 		String correct = "A B C D E F G";
 		tree = buildMediumTree();
 		Assert.assertEquals(correct, tree.traverseInorder().trim());
 	}
 
-	@Test
+	@Test (timeout = timeout)
 	public void testTraverseIn_Large() {
 		String correct = "A B C D E F G H I J K L M N O";
 		tree = buildLargeTree();
 		Assert.assertEquals(correct, tree.traverseInorder().trim());
 	}
 
-	@Test
+	@Test (timeout = timeout)
 	public void testTraversePost_Empty() {
 		String correct = "";
 		tree = buildEmpty();
 		Assert.assertEquals(correct, tree.traversePostorder().trim());
 	}
 
-	@Test
+	@Test (timeout = timeout)
 	public void testTraversePost_Small() {
 		String correct = "A C B";
 		tree = buildSmallTree();
 		Assert.assertEquals(correct, tree.traversePostorder().trim());
 	}
 
-	@Test
+	@Test (timeout = timeout)
 	public void testTraversePost_Medium() {
 		String correct = "A C B E G F D";
 		tree = buildMediumTree();
 		Assert.assertEquals(correct, tree.traversePostorder().trim());
 	}
 
-	@Test
+	@Test (timeout = timeout)
 	public void testTraversePost_Large() {
 		String correct = "A C B E G F D I K J M O N L H";
 		tree = buildLargeTree();
 		Assert.assertEquals(correct, tree.traversePostorder().trim());
 	}
 
-	@Test
+	@Test (timeout = timeout)
 	public void testToString_Medium() {
 		// Copied from BSTSet...why bother testing it much
 		String regex = "+D+B-A-C+F-E-G";
@@ -387,21 +387,21 @@ public class BSTTest {
 		Assert.assertTrue(tree.toString().replaceAll("\\s*", "").equals(regex));
 	}
 
-	@Test
+	@Test (timeout = timeout)
 	public void testSetEqualsTrue_Medium() {
 		BST<String> one = BSTBuilder.buildBST(new String[][] { { "C" }, { "B", "D" }, { "A", null, null, "E" } });
 		BST<String> two = BSTBuilder.buildBST(new String[][] { { "A" }, { null, "B" }, { null, "C" }, { null, "D" }, { null, "E" } });
 		Assert.assertTrue(one.setEquals(two));
 	}
 
-	@Test
+	@Test (timeout = timeout)
 	public void testSetEqualsFalse_Medium() {
 		BST<String> one = BSTBuilder.buildBST(new String[][] { { "C" }, { "B", "D" }, { "A", null, null, "E" } });
 		BST<String> two = BSTBuilder.buildBST(new String[][] { { "D" }, { "C", "E" }, { "B", null, null, "F" } });
 		Assert.assertFalse(one.setEquals(two));
 	}
 
-	@Test
+	@Test (timeout = timeout)
 	public void testRangeQueryMinNotFound_Medium() {
 		tree = buildMediumTree();
 		String[] correct = { "A", "B", "C", "D", "E", "F" };
@@ -412,7 +412,7 @@ public class BSTTest {
 		Assert.assertEquals(correct.length, num);
 	}
 
-	@Test
+	@Test (timeout = timeout)
 	public void testRangeQueryMaxNotFound_Medium() {
 		tree = buildMediumTree();
 		String[] correct = { "C", "D", "E", "F", "G" };
@@ -423,7 +423,7 @@ public class BSTTest {
 		Assert.assertEquals(correct.length, num);
 	}
 
-	@Test
+	@Test (timeout = timeout)
 	public void testRangeQueryFullTree_Medium() {
 		tree = buildMediumTree();
 		String[] correct = { "A", "B", "C", "D", "E", "F", "G" };
@@ -434,7 +434,7 @@ public class BSTTest {
 		Assert.assertEquals(correct.length, num);
 	}
 
-	@Test(expected = IllegalArgumentException.class)
+	@Test (timeout = timeout, expected = IllegalArgumentException.class)
 	public void testRangeQueryInvalid_Medium() {
 		tree = buildMediumTree();
 		String[] correct = { "A", "B", "C", "D", "E", "F", "G" };
@@ -442,25 +442,25 @@ public class BSTTest {
 		tree.rangeQuery("G", "A", found);
 	}
 
-	@Test(expected = IllegalArgumentException.class)
+	@Test (timeout = timeout, expected = IllegalArgumentException.class)
 	public void testOrderQueryMinTooSmall_Medium() {
 		tree = buildMediumTree();
 		tree.orderQuery(-5, 2, new String[] {});
 	}
 
-	@Test(expected = IllegalArgumentException.class)
+	@Test (timeout = timeout, expected = IllegalArgumentException.class)
 	public void testOrderQueryMaxTooBig_Medium() {
 		tree = buildMediumTree();
 		tree.orderQuery(2, 5000000, new String[] {});
 	}
 
-	@Test(expected = IllegalArgumentException.class)
+	@Test (timeout = timeout, expected = IllegalArgumentException.class)
 	public void testOrderQueryMinBiggerMax_Medium() {
 		tree = buildMediumTree();
 		tree.orderQuery(500, 2, new String[] {});
 	}
 
-	@Test
+	@Test (timeout = timeout)
 	public void testOrderQueryNormal_Medium() {
 		tree = buildMediumTree();
 		String[] correct = { "C", "D", "E" };
@@ -470,7 +470,7 @@ public class BSTTest {
 		Assert.assertArrayEquals(correct, found);
 	}
 
-	@Test
+	@Test (timeout = timeout)
 	public void testEqualsTrue_Medium() {
 		BST<String> one = buildMediumTree();
 		BST<String> two = buildMediumTree();
@@ -478,7 +478,7 @@ public class BSTTest {
 		Assert.assertTrue(one.equals(two));
 	}
 
-	@Test
+	@Test (timeout = timeout)
 	public void testEqualsFalse_Medium() {
 		BST<String> one = buildMediumTree();
 		BST<String> two = buildLargeTree();
@@ -486,7 +486,7 @@ public class BSTTest {
 		Assert.assertFalse(one.equals(two));
 	}
 
-	@Test
+	@Test (timeout = timeout)
 	public void testPredecessorMin_Medium() {
 		tree = buildMediumTree();
 		// Navigate to the min
@@ -498,7 +498,7 @@ public class BSTTest {
 		Assert.assertNull(tree.predecessor(test));
 	}
 
-	@Test
+	@Test (timeout = timeout)
 	public void testPredecessorDownTree_Medium() {
 		tree = buildMediumTree();
 		// Navigate to the min
@@ -506,7 +506,7 @@ public class BSTTest {
 		Assert.assertEquals("C", tree.predecessor(test).getData());
 	}
 
-	@Test
+	@Test (timeout = timeout)
 	public void testPredecessorUpTree_Medium() {
 		tree = buildMediumTree();
 		// "E" node
@@ -514,42 +514,42 @@ public class BSTTest {
 		Assert.assertEquals("D", tree.predecessor(test).getData());
 	}
 
-	@Test
+	@Test (timeout = timeout)
 	public void testLeftRotateParentNull_Small() {
 		tree = BSTBuilder.buildBST(new String[][] { { "D" }, { null, "F" }, { null, "H" } });
 		tree.leftRotate(tree.getRoot());
 		testTree(new String[][] { { "F" }, { "D", "H" } });
 	}
 
-	@Test
+	@Test (timeout = timeout)
 	public void testLeftRotateRightsLeftNotNull_Small() {
 		tree = BSTBuilder.buildBST(new String[][] { { "D" }, { null, "F" }, { null, "H" }, { "G", null } });
 		tree.leftRotate(tree.getRoot().getRight());
 		testTree(new String[][] { { "D" }, { null, "H" }, { "F", null }, { null, "G" } });
 	}
 
-	@Test
+	@Test (timeout = timeout)
 	public void testRightRotateParentNull_Small() {
 		tree = BSTBuilder.buildBST(new String[][] { { "D" }, { "C", null }, { "A", null } });
 		tree.rightRotate(tree.getRoot());
 		testTree(new String[][] { { "C" }, { "A", "D" } });
 	}
 
-	@Test
+	@Test (timeout = timeout)
 	public void testLeftRotateRightsLeftNull_Small() {
 		tree = BSTBuilder.buildBST(new String[][] { { "D" }, { null, "F" }, { null, "H" } });
 		tree.leftRotate(tree.getRoot().getRight());
 		testTree(new String[][] { { "D" }, { null, "H" }, { "F", null } });
 	}
 
-	@Test
+	@Test (timeout = timeout)
 	public void testRightRotateLeftsRightNotNull_Small() {
 		tree = BSTBuilder.buildBST(new String[][] { { "F" }, { "D", null }, { "B", null }, { null, "C" } });
 		tree.rightRotate(tree.getRoot().getLeft());
 		testTree(new String[][] { { "F" }, { "B", null }, { null, "D" }, { "C", null } });
 	}
 
-	@Test
+	@Test (timeout = timeout)
 	public void testRightRotateLeftsRightNull_Small() {
 		tree = BSTBuilder.buildBST(new String[][] { { "F" }, { "D", null }, { "B", null } });
 		tree.rightRotate(tree.getRoot().getLeft());
