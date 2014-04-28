@@ -430,6 +430,16 @@ public class BSTTest {
 		
 		Assert.assertArrayEquals(correct, found);
 	}
+	
+	@Test (expected = IllegalArgumentException.class)
+	public void testRangeQueryInvalid_Medium() {
+		tree = buildMediumTree();
+		String[] correct = {"A", "B", "C", "D", "E", "F", "G"};
+		String[] found = new String[correct.length];
+		tree.rangeQuery("G", "A", found);
+		
+		Assert.assertArrayEquals(correct, found);
+	}
 
 	private static BST<String> buildEmpty() {
 		return BSTBuilder.buildBST(new String[][] {});
