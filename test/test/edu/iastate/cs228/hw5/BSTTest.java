@@ -513,6 +513,20 @@ public class BSTTest {
 		Node<String> test = tree.getRoot().getRight().getLeft();
 		Assert.assertEquals("D", tree.predecessor(test).getData());
 	}
+	
+	@Test
+	public void testLeftRotateRightsLeftNotNull_Medium() {
+		tree = BSTBuilder.buildBST(new String[][] {{"D"}, {null, "F"}, {null, "H"}, {"G", null}});
+		tree.leftRotate(tree.getRoot().getRight());
+		testTree(new String[][] {{"D"}, {null, "H"}, {"F", null}, {null, "G"}});
+	}
+	
+	@Test
+	public void testLeftRotateRightsLeftNull_Medium() {
+		tree = BSTBuilder.buildBST(new String[][] {{"D"}, {null, "F"}, {null, "H"}});
+		tree.leftRotate(tree.getRoot().getRight());
+		testTree(new String[][] {{"D"}, {null, "H"}, {"F", null}});
+	}
 
 	private static BST<String> buildEmpty() {
 		return BSTBuilder.buildBST(new String[][] {});
