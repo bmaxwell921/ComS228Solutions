@@ -78,14 +78,14 @@ public class BST<E extends Comparable<? super E>> extends AbstractSet<E> {
 
 		addAll(Arrays.asList(eleArray));
 	}
-	
+
 	@Override
 	public boolean addAll(Collection<? extends E> c) {
 		for (E data : c) {
 			add(data);
 		}
 		return true;
-		
+
 	}
 
 	/**
@@ -105,7 +105,7 @@ public class BST<E extends Comparable<? super E>> extends AbstractSet<E> {
 		}
 		deepCopy(root);
 	}
-	
+
 	private void deepCopy(Node<E> root) {
 		// Quit fast for empty trees
 		if (root == null) {
@@ -114,31 +114,32 @@ public class BST<E extends Comparable<? super E>> extends AbstractSet<E> {
 		// We're gonna go level by level
 		Queue<Node<E>> them = new LinkedList<>();
 		Queue<Node<E>> us = new LinkedList<>();
-		
+
 		them.offer(root);
 		this.root = new Node<E>(root.getData());
 		us.offer(this.root);
-		
+
 		// Make sure to set up the size properly
 		this.size = 1;
-		
+
 		while (!them.isEmpty()) {
 			// Get each node to work with
 			Node<E> theirNode = them.poll();
 			Node<E> ourNode = us.poll();
-			
+
 			// Set our data and then get the children to link in
 			ourNode.setData(theirNode.getData());
 			Node<E> ourLeft = theirNode.getLeft() == null ? null : new Node<>(theirNode.getLeft().getData());
 			Node<E> ourRight = theirNode.getRight() == null ? null : new Node<>(theirNode.getRight().getData());
-			
+
 			// Only link in and process the non-null elements
 			if (ourLeft != null) {
 				ourLeft.setParent(ourNode);
 				ourNode.setLeft(ourLeft);
 				us.offer(ourLeft);
 				them.offer(theirNode.getLeft());
-				++this.size;;
+				++this.size;
+				;
 			}
 			if (ourRight != null) {
 				ourRight.setParent(ourNode);
@@ -146,7 +147,7 @@ public class BST<E extends Comparable<? super E>> extends AbstractSet<E> {
 				us.offer(ourRight);
 				them.offer(theirNode.getRight());
 				++this.size;
-			}			
+			}
 		}
 	}
 
@@ -290,7 +291,7 @@ public class BST<E extends Comparable<? super E>> extends AbstractSet<E> {
 	public boolean setEquals(BST<E> tree) {
 		tree.traverseInorder();
 		this.traverseInorder();
-		
+
 		return this.inorderArr.equals(tree.inorderArr);
 	}
 
@@ -409,12 +410,12 @@ public class BST<E extends Comparable<? super E>> extends AbstractSet<E> {
 		mindex = (mindex == -1) ? 0 : mindex;
 		int maxdex = inorderArr.indexOf(maxValue);
 		maxdex = (maxdex == -1) ? inorderArr.size() - 1 : maxdex;
-		
+
 		int place = 0;
 		for (int i = mindex; i <= maxdex; ++i) {
 			eleArray[place++] = inorderArr.get(i);
 		}
-		
+
 		return place;
 	}
 
@@ -436,11 +437,11 @@ public class BST<E extends Comparable<? super E>> extends AbstractSet<E> {
 	 * @return
 	 */
 	public void orderQuery(int imin, int imax, E[] eleArray) throws IllegalArgumentException {
-		if (imax < imin || imin < 0 || imax >= size ) {
+		if (imax < imin || imin < 0 || imax >= size) {
 			throw new IllegalArgumentException("ahhhhhhh");
 		}
 		traverseInorder();
-		
+
 		int place = 0;
 		for (int i = imin; i <= imax; ++i) {
 			eleArray[place++] = inorderArr.get(i);
@@ -453,26 +454,67 @@ public class BST<E extends Comparable<? super E>> extends AbstractSet<E> {
 
 	@Override
 	public boolean contains(Object obj) {
-		// from BSTSet.java
-
-		return false;
+		// Copied from BSTSet.java
+		E key = (E) obj;
+		return findEntry(key) != null;
 	}
 
 	@Override
 	public boolean add(E key) {
-		// from BSTSet.java
-		// Reset tags redoPreorder, redoInorder, redoPostorder
+		// Copied from BSTSet.java
+		if (root == null) {
+			root = new Node<>(key);
+			++size;
+			redoPostorder = true;
+			redoPreorder = true;
+			redoInorder = true;
+			return true;
+		}
 
-		return false;
+		Node<E> current = root;
+		while (true) {
+			int comp = current.getData().compareTo(key);
+			if (comp == 0) {
+				// key is already in the tree
+				return false;
+			} else if (comp > 0) {
+				if (current.getLeft() != null) {
+					current = current.getLeft();
+				} else {
+					current.setLeft(new Node<>(key));
+					current.getLeft().setParent(current);
+					++size;
+					redoPostorder = true;
+					redoPreorder = true;
+					redoInorder = true;
+					return true;
+				}
+			} else {
+				if (current.getRight() != null) {
+					current = current.getRight();
+				} else {
+					current.setRight(new Node<>(key));
+					current.getRight().setRight(current);
+					++size;
+					redoPostorder = true;
+					redoPreorder = true;
+					redoInorder = true;
+					return true;
+				}
+			}
+		}
 	}
 
 	@Override
 	public boolean remove(Object obj) {
-		// from BSTSet.java
-		//
-		// Reset tags redoPreorder, redoInorder, redoPostorder
-
-		return false;
+		// Copied from BSTSet.java
+		E key = (E) obj;
+		Node<E> n = findEntry(key);
+		if (n == null) {
+			return false;
+		}
+		unlinkNode(n);
+		return true;
 	}
 
 	/**
@@ -483,8 +525,18 @@ public class BST<E extends Comparable<? super E>> extends AbstractSet<E> {
 	 * @return the node containing key, or null if not found
 	 */
 	protected Node<E> findEntry(E key) {
-		// from BSTset.java
-
+		// Copied from BSTSet.java
+		Node<E> current = root;
+		while (current != null) {
+			int comp = current.getData().compareTo(key);
+			if (comp == 0) {
+				return current;
+			} else if (comp > 0) {
+				current = current.getLeft();
+			} else {
+				current = current.getRight();
+			}
+		}
 		return null;
 	}
 
@@ -500,9 +552,28 @@ public class BST<E extends Comparable<? super E>> extends AbstractSet<E> {
 	 *         no successor
 	 */
 	protected Node<E> successor(Node<E> n) {
-		// from BSTSet.java
-
-		return null;
+		// Copied from BSTSet.java
+		if (n == null) {
+			return null;
+		} else if (n.getRight() != null) {
+			// leftmost entry in right subtree
+			Node<E> current = n.getRight();
+			while (current.getLeft() != null) {
+				current = current.getLeft();
+			}
+			return current;
+		} else {
+			// we need to go up the tree to the closest ancestor that is
+			// a left child; its parent must be the successor
+			Node<E> current = n.getParent();
+			Node<E> child = n;
+			while (current != null && current.getRight() == child) {
+				child = current;
+				current = current.getParent();
+			}
+			// either current is null, or child is left child of current
+			return current;
+		}
 	}
 
 	/**
@@ -546,7 +617,42 @@ public class BST<E extends Comparable<? super E>> extends AbstractSet<E> {
 	 *            node to be removed
 	 */
 	protected void unlinkNode(Node<E> n) {
-		// from BSTSet.java
+		// Copied from BSTSet.java
+
+		// first deal with the two-child case; copy
+		// data from successor up to n, and then delete successor
+		// node instead of given node n
+		if (n.getLeft() != null && n.getRight() != null) {
+			Node<E> s = successor(n);
+			n.setData(s.getData());
+			n = s; // causes s to be deleted in code below
+		}
+
+		// n has at most one child
+		Node<E> replacement = null;
+		if (n.getLeft() != null) {
+			replacement = n.getLeft();
+		} else if (n.getRight() != null) {
+			replacement = n.getRight();
+		}
+
+		// link replacement into tree in place of node n
+		// (replacement may be null)
+		if (n.getParent() == null) {
+			root = replacement;
+		} else {
+			if (n == n.getParent().getLeft()) {
+				n.getParent().setLeft(replacement);
+			} else {
+				n.getParent().setRight(replacement);
+			}
+		}
+
+		if (replacement != null) {
+			replacement.setParent(n.getParent());
+		}
+
+		--size;
 	}
 
 	// -------------
@@ -561,8 +667,8 @@ public class BST<E extends Comparable<? super E>> extends AbstractSet<E> {
 	@Override
 	public String toString() {
 		StringBuilder sb = new StringBuilder();
-	    toStringRec(root, sb, 0);
-	    return sb.toString();
+		toStringRec(root, sb, 0);
+		return sb.toString();
 	}
 
 	/**
@@ -619,10 +725,10 @@ public class BST<E extends Comparable<? super E>> extends AbstractSet<E> {
 		if (root.getLeft() != null && root.getLeft().getData().compareTo(root.getData()) >= 0) {
 			return false;
 		}
-		if (root.getRight() != null && root.getRight().getData().compareTo(root.getData()) <= 0)  {
+		if (root.getRight() != null && root.getRight().getData().compareTo(root.getData()) <= 0) {
 			return false;
 		}
-		
+
 		return isBST(root.getLeft()) && isBST(root.getRight());
 	}
 
