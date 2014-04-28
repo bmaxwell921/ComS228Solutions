@@ -400,6 +400,36 @@ public class BSTTest {
 		BST<String> two = BSTBuilder.buildBST(new String[][] { { "D" }, { "C", "E" }, { "B", null, null, "F" } });
 		Assert.assertFalse(one.setEquals(two));
 	}
+	
+	@Test
+	public void testRangeQueryMinNotFound_Medium() {
+		tree = buildMediumTree();
+		String[] correct = {"A", "B", "C", "D", "E", "F"};
+		String[] found = new String[correct.length];
+		tree.rangeQuery("@", "F", found);
+		
+		Assert.assertArrayEquals(correct, found);
+	}
+	
+	@Test
+	public void testRangeQueryMaxNotFound_Medium() {
+		tree = buildMediumTree();
+		String[] correct = {"C", "D", "E", "F", "G"};
+		String[] found = new String[correct.length];
+		tree.rangeQuery("C", "[", found);
+		
+		Assert.assertArrayEquals(correct, found);
+	}
+	
+	@Test
+	public void testRangeQueryFullTree_Medium() {
+		tree = buildMediumTree();
+		String[] correct = {"A", "B", "C", "D", "E", "F", "G"};
+		String[] found = new String[correct.length];
+		tree.rangeQuery("A", "G", found);
+		
+		Assert.assertArrayEquals(correct, found);
+	}
 
 	private static BST<String> buildEmpty() {
 		return BSTBuilder.buildBST(new String[][] {});
