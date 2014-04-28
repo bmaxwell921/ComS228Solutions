@@ -3,6 +3,7 @@ package edu.iastate.cs228.hw5;
 import java.util.AbstractSet;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.Iterator;
 import java.util.List;
 
@@ -74,6 +75,15 @@ public class BST<E extends Comparable<? super E>> extends AbstractSet<E> {
 		this.postorderArr = new ArrayList<>();
 
 		addAll(Arrays.asList(eleArray));
+	}
+	
+	@Override
+	public boolean addAll(Collection<? extends E> c) {
+		for (E data : c) {
+			add(data);
+		}
+		return true;
+		
 	}
 
 	/**
