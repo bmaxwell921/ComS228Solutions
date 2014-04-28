@@ -663,6 +663,10 @@ public class BST<E extends Comparable<? super E>> extends AbstractSet<E> {
 		if (childChild != null) {
 			childChild.setParent(n);
 		}
+		
+		if (n == this.root) {
+			this.root = child;
+		}
 
 		redoInorder = true;
 		redoPreorder = true;
@@ -676,8 +680,31 @@ public class BST<E extends Comparable<? super E>> extends AbstractSet<E> {
 	 * @param n
 	 */
 	public void rightRotate(Node<E> n) {
-		// TODO
+		if (n == null) {
+			return;
+		}
+		
+		Node<E> parent = n.getParent();
+		Node<E> child = n.getLeft();
+		Node<E> childChild = child.getRight();
+		
+		if (parent != null) {
+			parent.setLeft(child);
+		}
+		
+		child.setParent(parent);
+		child.setRight(n);
+		n.setParent(child);
+		n.setLeft(childChild);
+		
+		if (childChild != null) {
+			childChild.setParent(n);
+		}
 
+		if (n == this.root) {
+			this.root = child;
+		}
+		
 		redoInorder = true;
 		redoPreorder = true;
 		redoPostorder = true;
