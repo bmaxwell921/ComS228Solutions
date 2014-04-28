@@ -286,6 +286,14 @@ public class BSTTest {
 		tree = buildLargeTree();
 		Assert.assertEquals(correct, tree.traversePostorder().trim());
 	}
+	
+	@Test
+	public void testToString_Medium() {
+		// Copied from BSTSet...why bother testing it much
+		String regex = "+D+B-A-C+F-E-G";
+		tree = buildMediumTree();
+		Assert.assertTrue(tree.toString().replaceAll("\\s*", "").equals(regex));
+	}
 
 	private static BST<String> buildEmpty() {
 		return BSTBuilder.buildBST(new String[][] {});
