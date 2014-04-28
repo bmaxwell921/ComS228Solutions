@@ -406,9 +406,10 @@ public class BSTTest {
 		tree = buildMediumTree();
 		String[] correct = {"A", "B", "C", "D", "E", "F"};
 		String[] found = new String[correct.length];
-		tree.rangeQuery("@", "F", found);
+		int num = tree.rangeQuery("@", "F", found);
 		
 		Assert.assertArrayEquals(correct, found);
+		Assert.assertEquals(correct.length, num);
 	}
 	
 	@Test
@@ -416,9 +417,10 @@ public class BSTTest {
 		tree = buildMediumTree();
 		String[] correct = {"C", "D", "E", "F", "G"};
 		String[] found = new String[correct.length];
-		tree.rangeQuery("C", "[", found);
+		int num = tree.rangeQuery("C", "[", found);
 		
 		Assert.assertArrayEquals(correct, found);
+		Assert.assertEquals(correct.length, num);
 	}
 	
 	@Test
@@ -426,9 +428,10 @@ public class BSTTest {
 		tree = buildMediumTree();
 		String[] correct = {"A", "B", "C", "D", "E", "F", "G"};
 		String[] found = new String[correct.length];
-		tree.rangeQuery("A", "G", found);
+		int num = tree.rangeQuery("A", "G", found);
 		
 		Assert.assertArrayEquals(correct, found);
+		Assert.assertEquals(correct.length, num);
 	}
 	
 	@Test (expected = IllegalArgumentException.class)
@@ -437,8 +440,6 @@ public class BSTTest {
 		String[] correct = {"A", "B", "C", "D", "E", "F", "G"};
 		String[] found = new String[correct.length];
 		tree.rangeQuery("G", "A", found);
-		
-		Assert.assertArrayEquals(correct, found);
 	}
 
 	private static BST<String> buildEmpty() {
