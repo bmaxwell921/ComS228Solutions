@@ -441,6 +441,34 @@ public class BSTTest {
 		String[] found = new String[correct.length];
 		tree.rangeQuery("G", "A", found);
 	}
+	
+	@Test (expected = IllegalArgumentException.class)
+	public void testOrderQueryMinTooSmall_Medium() {
+		tree = buildMediumTree();
+		tree.orderQuery(-5, 2, new String[] {});
+	}
+	
+	@Test (expected = IllegalArgumentException.class)
+	public void testOrderQueryMaxTooBig_Medium() {
+		tree = buildMediumTree();
+		tree.orderQuery(2, 5000000, new String[] {});
+	}
+	
+	@Test (expected = IllegalArgumentException.class)
+	public void testOrderQueryMinBiggerMax_Medium() {
+		tree = buildMediumTree();
+		tree.orderQuery(500, 2, new String[] {});
+	}
+	
+	@Test
+	public void testOrderQueryNormal_Medium() {
+		tree = buildMediumTree();
+		String[] correct = {"C", "D", "E"};
+		String[] found = new String[correct.length];
+		tree.orderQuery(2, 4, found);
+		
+		Assert.assertArrayEquals(correct, found);
+	}
 
 	private static BST<String> buildEmpty() {
 		return BSTBuilder.buildBST(new String[][] {});

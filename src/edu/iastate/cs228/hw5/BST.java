@@ -436,7 +436,15 @@ public class BST<E extends Comparable<? super E>> extends AbstractSet<E> {
 	 * @return
 	 */
 	public void orderQuery(int imin, int imax, E[] eleArray) throws IllegalArgumentException {
-		// TODO
+		if (imax < imin || imin < 0 || imax >= size ) {
+			throw new IllegalArgumentException("ahhhhhhh");
+		}
+		traverseInorder();
+		
+		int place = 0;
+		for (int i = imin; i <= imax; ++i) {
+			eleArray[place++] = inorderArr.get(i);
+		}
 	}
 
 	// --------------------------
