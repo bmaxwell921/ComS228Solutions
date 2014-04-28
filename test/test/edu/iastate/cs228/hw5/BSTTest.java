@@ -27,6 +27,94 @@ public class BSTTest {
 	private BST<String> tree;
 
 	@Test
+	public void testDefaultCons() {
+		tree = new BST<>();
+		testTree(new String[][] {});
+	}
+
+	@Test
+	public void testSpecificCons_Empty() {
+		tree = new BST<>(new String[] {});
+		testTree(new String[][] {});
+	}
+
+	@Test
+	public void testSpecificCons_Small() {
+		tree = new BST<>(new String[] { "B", "A", "C" });
+		testTree(new String[][] { { "B" }, { "A", "C" } });
+	}
+
+	@Test
+	public void testSpecificCons_Medium() {
+		tree = new BST<>(new String[] { "D", "B", "F", "A", "C", "E", "G" });
+		testTree(new String[][] { { "D" }, { "B", "F" }, { "A", "C", "E", "G" } });
+	}
+
+	@Test
+	public void testSpecificCons_Large() {
+		tree = new BST<>(new String[] { "H", "D", "L", "B", "F", "J", "N", "A", "C", "E", "G", "I", "K", "M", "O" });
+		testTree(new String[][] { { "H" }, { "D", "L" }, { "B", "F", "J", "N" }, { "A", "C", "E", "G", "I", "K", "M", "O" } });
+	}
+
+	@Test
+	public void testCopyCons_Empty() throws TreeStructureException {
+		Node<String> oRoot = null;
+		tree = new BST<>(oRoot);
+		testTree(new String[][] {});
+	}
+
+	@Test
+	public void testCopyCons_Small() throws TreeStructureException {
+		Node<String> oRoot = buildSmallTree().getRoot();
+		tree = new BST<>(oRoot);
+		testTree(new String[][] { { "B" }, { "A", "C" } });
+	}
+
+	@Test
+	public void testCopyCons_Medium() throws TreeStructureException {
+		Node<String> oRoot = buildMediumTree().getRoot();
+		tree = new BST<>(oRoot);
+		testTree(new String[][] { { "D" }, { "B", "F" }, { "A", "C", "E", "G" } });
+	}
+
+	@Test
+	public void testCopyCons_Large() throws TreeStructureException {
+		Node<String> oRoot = buildLargeTree().getRoot();
+		tree = new BST<>(oRoot);
+		testTree(new String[][] { { "H" }, { "D", "L" }, { "B", "F", "J", "N" }, { "A", "C", "E", "G", "I", "K", "M", "O" } });
+	}
+
+	@Test
+	public void testCopyConsHoles_Medium() throws TreeStructureException {
+		String[][] input = new String[][] { { "D" }, { null, "F" }, { null, "G" } };
+		Node<String> oRoot = BSTBuilder.buildBST(input).getRoot();
+		tree = new BST<>(oRoot);
+		testTree(input);
+	}
+
+	@Test
+	public void testCopyConsHoles_Large() throws TreeStructureException {
+		String[][] input = new String[][] { { "H" }, { null, "L" }, { "J", null }, { "I", null } };
+		Node<String> oRoot = BSTBuilder.buildBST(input).getRoot();
+		tree = new BST<>(oRoot);
+		testTree(input);
+	}
+
+	@Test(expected = TreeStructureException.class)
+	public void testCopyConsNotBST_Small() throws TreeStructureException {
+		Node<String> oRoot = new Node<>("A");
+		Node<String> left = new Node<>("B");
+		Node<String> right = new Node<>("C");
+
+		oRoot.setLeft(left);
+		oRoot.setRight(right);
+		left.setParent(oRoot);
+		right.setParent(oRoot);
+
+		tree = new BST<>(oRoot);
+	}
+
+	@Test
 	public void testHeight_Empty() {
 		// DON'T PUT THIS IN THE REAL TESTS!
 		tree = buildEmpty();
@@ -300,61 +388,17 @@ public class BSTTest {
 	}
 
 	@Test
-	public void testCopyCons_Empty() throws TreeStructureException {
-		Node<String> oRoot = null;
-		tree = new BST<>(oRoot);
-		testTree(new String[][] {});
+	public void testSetEqualsTrue_Medium() {
+		BST<String> one = BSTBuilder.buildBST(new String[][] { { "C" }, { "B", "D" }, { "A", null, null, "E" } });
+		BST<String> two = BSTBuilder.buildBST(new String[][] { { "A" }, { null, "B" }, { null, "C" }, { null, "D" }, { null, "E" } });
+		Assert.assertTrue(one.setEquals(two));
 	}
 
 	@Test
-	public void testCopyCons_Small() throws TreeStructureException {
-		Node<String> oRoot = buildSmallTree().getRoot();
-		tree = new BST<>(oRoot);
-		testTree(new String[][] { { "B" }, { "A", "C" } });
-	}
-
-	@Test
-	public void testCopyCons_Medium() throws TreeStructureException {
-		Node<String> oRoot = buildMediumTree().getRoot();
-		tree = new BST<>(oRoot);
-		testTree(new String[][] { { "D" }, { "B", "F" }, { "A", "C", "E", "G" } });
-	}
-
-	@Test
-	public void testCopyCons_Large() throws TreeStructureException {
-		Node<String> oRoot = buildLargeTree().getRoot();
-		tree = new BST<>(oRoot);
-		testTree(new String[][] { { "H" }, { "D", "L" }, { "B", "F", "J", "N" }, { "A", "C", "E", "G", "I", "K", "M", "O" } });
-	}
-
-	@Test
-	public void testCopyConsHoles_Medium() throws TreeStructureException {
-		String[][] input = new String[][] {{"D"}, {null, "F"}, {null, "G"}};
-		Node<String> oRoot = BSTBuilder.buildBST(input).getRoot();
-		tree = new BST<>(oRoot);
-		testTree(input);
-	}
-
-	@Test
-	public void testCopyConsHoles_Large() throws TreeStructureException {
-		String[][] input = new String[][] { { "H" }, { null, "L" }, { "J", null }, {"I", null} };
-		Node<String> oRoot = BSTBuilder.buildBST(input).getRoot();
-		tree = new BST<>(oRoot);
-		testTree(input);
-	}
-	
-	@Test (expected = TreeStructureException.class)
-	public void testCopyConsNotBST_Small() throws TreeStructureException {
-		Node<String> oRoot = new Node<>("A");
-		Node<String> left = new Node<>("B");
-		Node<String> right = new Node<>("C");
-		
-		oRoot.setLeft(left);
-		oRoot.setRight(right);
-		left.setParent(oRoot);
-		right.setParent(oRoot);
-		
-		tree = new BST<>(oRoot);
+	public void testSetEqualsFalse_Medium() {
+		BST<String> one = BSTBuilder.buildBST(new String[][] { { "C" }, { "B", "D" }, { "A", null, null, "E" } });
+		BST<String> two = BSTBuilder.buildBST(new String[][] { { "D" }, { "C", "E" }, { "B", null, null, "F" } });
+		Assert.assertFalse(one.setEquals(two));
 	}
 
 	private static BST<String> buildEmpty() {
