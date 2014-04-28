@@ -53,7 +53,6 @@ public class BSTValidator {
 	 */
 	public static <E extends Comparable<? super E>> boolean hasProperRefs(BST<E> tree) {
 		final BoolBox b = new BoolBox(true);
-		final Node<E> root = tree.getRoot();
 		inorderRec(null, tree.getRoot(), new Visitor() {
 			@Override
 			public void visit(Node<?> parent, Node<?> cur) {
