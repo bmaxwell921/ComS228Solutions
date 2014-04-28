@@ -621,16 +621,16 @@ public class BST<E extends Comparable<? super E>> extends AbstractSet<E> {
 			}
 			return cur;
 		}
-		
+
 		// Or we have to go up the tree
 		Node<E> parent = n.getParent();
 		Node<E> cur = n;
-		
+
 		while (parent != null && parent.getLeft() == cur) {
 			cur = parent;
-			parent= parent.getParent();
+			parent = parent.getParent();
 		}
-		
+
 		// Either found parent, or we hit the top
 		return parent;
 	}
@@ -642,7 +642,31 @@ public class BST<E extends Comparable<? super E>> extends AbstractSet<E> {
 	 * @param n
 	 */
 	public void leftRotate(Node<E> n) {
-		// TODO
+		if (n == null) {
+			return;
+		}
+		
+		// Just gotta swap some references
+		Node<E> parent = n.getParent();
+		Node<E> child = n.getRight();
+		Node<E> childChild = child.getLeft();
+
+		if (parent != null) {
+			parent.setRight(child);
+		}
+		
+		child.setParent(parent);
+		child.setLeft(n);
+		n.setParent(child);
+		n.setRight(childChild);
+
+		if (childChild != null) {
+			childChild.setParent(n);
+		}
+
+		redoInorder = true;
+		redoPreorder = true;
+		redoPostorder = true;
 	}
 
 	/**
@@ -653,6 +677,10 @@ public class BST<E extends Comparable<? super E>> extends AbstractSet<E> {
 	 */
 	public void rightRotate(Node<E> n) {
 		// TODO
+
+		redoInorder = true;
+		redoPreorder = true;
+		redoPostorder = true;
 	}
 
 	/**
