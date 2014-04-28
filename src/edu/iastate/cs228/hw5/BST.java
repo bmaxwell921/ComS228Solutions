@@ -281,22 +281,22 @@ public class BST<E extends Comparable<? super E>> extends AbstractSet<E> {
 		if (o == this) {
 			return true;
 		}
-		
+
 		BST<E> oBST = (BST<E>) o;
 		if (!setEquals(oBST)) {
 			return false;
 		}
-		
+
 		return checkStructure(this.getRoot(), oBST.getRoot());
 	}
-	
+
 	// Recursively checks that the given trees have the same structures
 	private boolean checkStructure(Node<E> thisRoot, Node<E> otherRoot) {
 		// Base case success
 		if (thisRoot == otherRoot) {
 			return true;
 		}
-		
+
 		// Base case failure
 		if (thisRoot == null && otherRoot != null) {
 			return false;
@@ -304,9 +304,9 @@ public class BST<E extends Comparable<? super E>> extends AbstractSet<E> {
 		if (thisRoot != null && otherRoot == null) {
 			return false;
 		}
-		
-		return thisRoot.getData().equals(otherRoot.getData()) && checkStructure(thisRoot.getLeft(), otherRoot.getLeft()) && 
-				checkStructure(thisRoot.getRight(), otherRoot.getRight());
+
+		return thisRoot.getData().equals(otherRoot.getData()) && checkStructure(thisRoot.getLeft(), otherRoot.getLeft())
+				&& checkStructure(thisRoot.getRight(), otherRoot.getRight());
 	}
 
 	/**
@@ -610,12 +610,29 @@ public class BST<E extends Comparable<? super E>> extends AbstractSet<E> {
 	 * 
 	 * @param n
 	 * @return the predecessor of the given node in this tree, or null if there
-	 *         is no successor
+	 *         is no predecessor
 	 */
 	public Node<E> predecessor(Node<E> n) {
-		// ToDO
-
-		return null;
+		// Either the right most in the left subtree
+		if (n.getLeft() != null) {
+			Node<E> cur = n.getLeft();
+			while (cur.getRight() != null) {
+				cur = cur.getRight();
+			}
+			return cur;
+		}
+		
+		// Or we have to go up the tree
+		Node<E> parent = n.getParent();
+		Node<E> cur = n;
+		
+		while (parent != null && parent.getLeft() == cur) {
+			cur = parent;
+			parent= parent.getParent();
+		}
+		
+		// Either found parent, or we hit the top
+		return parent;
 	}
 
 	/**
