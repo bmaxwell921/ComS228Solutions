@@ -479,11 +479,39 @@ public class BSTTest {
 	}
 	
 	@Test
-	public void testEqualsFals_Medium() {
+	public void testEqualsFalse_Medium() {
 		BST<String> one = buildMediumTree();
 		BST<String> two = buildLargeTree();
 		
 		Assert.assertFalse(one.equals(two));
+	}
+	
+	@Test
+	public void testPredecessorMin_Medium() {
+		tree = buildMediumTree();
+		// Navigate to the min
+		Node<String> test = tree.getRoot();
+		while (test.getLeft() != null) {
+			test = test.getLeft();
+		}
+		
+		Assert.assertNull(tree.predecessor(test));
+	}
+	
+	@Test
+	public void testPredecessorDownTree_Medium() {
+		tree = buildMediumTree();
+		// Navigate to the min
+		Node<String> test = tree.getRoot();
+		Assert.assertEquals("C", tree.predecessor(test).getData());
+	}
+	
+	@Test
+	public void testPredecessorUpTree_Medium() {
+		tree = buildMediumTree();
+		// "E" node
+		Node<String> test = tree.getRoot().getRight().getLeft();
+		Assert.assertEquals("D", tree.predecessor(test).getData());
 	}
 
 	private static BST<String> buildEmpty() {
