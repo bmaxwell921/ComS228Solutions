@@ -275,9 +275,38 @@ public class BST<E extends Comparable<? super E>> extends AbstractSet<E> {
 	 */
 	@Override
 	public boolean equals(Object o) {
-		// TODO
-
-		return false;
+		if (o == null || o.getClass() != this.getClass()) {
+			return false;
+		}
+		if (o == this) {
+			return true;
+		}
+		
+		BST<E> oBST = (BST<E>) o;
+		if (!setEquals(oBST)) {
+			return false;
+		}
+		
+		return checkStructure(this.getRoot(), oBST.getRoot());
+	}
+	
+	// Recursively checks that the given trees have the same structures
+	private boolean checkStructure(Node<E> thisRoot, Node<E> otherRoot) {
+		// Base case success
+		if (thisRoot == otherRoot) {
+			return true;
+		}
+		
+		// Base case failure
+		if (thisRoot == null && otherRoot != null) {
+			return false;
+		}
+		if (thisRoot != null && otherRoot == null) {
+			return false;
+		}
+		
+		return thisRoot.getData().equals(otherRoot.getData()) && checkStructure(thisRoot.getLeft(), otherRoot.getLeft()) && 
+				checkStructure(thisRoot.getRight(), otherRoot.getRight());
 	}
 
 	/**
@@ -494,7 +523,7 @@ public class BST<E extends Comparable<? super E>> extends AbstractSet<E> {
 					current = current.getRight();
 				} else {
 					current.setRight(new Node<>(key));
-					current.getRight().setRight(current);
+					current.getRight().setParent(current);
 					++size;
 					redoPostorder = true;
 					redoPreorder = true;
