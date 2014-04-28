@@ -469,6 +469,22 @@ public class BSTTest {
 		
 		Assert.assertArrayEquals(correct, found);
 	}
+	
+	@Test
+	public void testEqualsTrue_Medium() {
+		BST<String> one = buildMediumTree();
+		BST<String> two = buildMediumTree();
+		
+		Assert.assertTrue(one.equals(two));
+	}
+	
+	@Test
+	public void testEqualsFals_Medium() {
+		BST<String> one = buildMediumTree();
+		BST<String> two = buildLargeTree();
+		
+		Assert.assertFalse(one.equals(two));
+	}
 
 	private static BST<String> buildEmpty() {
 		return BSTBuilder.buildBST(new String[][] {});
