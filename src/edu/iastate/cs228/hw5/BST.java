@@ -45,7 +45,7 @@ public class BST<E extends Comparable<? super E>> extends AbstractSet<E> {
 	 * Default constructor builds an empty tree.
 	 */
 	public BST() {
-		this((E[]) new Object[0]);
+		this((E[]) new Comparable[0]);
 	}
 
 	/**
@@ -288,9 +288,10 @@ public class BST<E extends Comparable<? super E>> extends AbstractSet<E> {
 	 * @return
 	 */
 	public boolean setEquals(BST<E> tree) {
-		// TODO
-
-		return false;
+		tree.traverseInorder();
+		this.traverseInorder();
+		
+		return this.inorderArr.equals(tree.inorderArr);
 	}
 
 	// ----------
