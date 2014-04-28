@@ -400,9 +400,22 @@ public class BST<E extends Comparable<? super E>> extends AbstractSet<E> {
 	 * @return number of elements in the interval [minValue, maxValue]
 	 */
 	public int rangeQuery(E minValue, E maxValue, E[] eleArray) throws IllegalArgumentException {
-		// TODO
-
-		return 0;
+		if (minValue.compareTo(maxValue) > 0) {
+			throw new IllegalArgumentException("ahhhhhhh");
+		}
+		traverseInorder();
+		int mindex = inorderArr.indexOf(minValue);
+		// Cap it for not found indices
+		mindex = (mindex == -1) ? 0 : mindex;
+		int maxdex = inorderArr.indexOf(maxValue);
+		maxdex = (maxdex == -1) ? inorderArr.size() - 1 : maxdex;
+		
+		int place = 0;
+		for (int i = mindex; i <= maxdex; ++i) {
+			eleArray[place++] = inorderArr.get(i);
+		}
+		
+		return place;
 	}
 
 	/**
