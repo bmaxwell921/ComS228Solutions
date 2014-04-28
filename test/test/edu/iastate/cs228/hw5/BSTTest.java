@@ -400,92 +400,92 @@ public class BSTTest {
 		BST<String> two = BSTBuilder.buildBST(new String[][] { { "D" }, { "C", "E" }, { "B", null, null, "F" } });
 		Assert.assertFalse(one.setEquals(two));
 	}
-	
+
 	@Test
 	public void testRangeQueryMinNotFound_Medium() {
 		tree = buildMediumTree();
-		String[] correct = {"A", "B", "C", "D", "E", "F"};
+		String[] correct = { "A", "B", "C", "D", "E", "F" };
 		String[] found = new String[correct.length];
 		int num = tree.rangeQuery("@", "F", found);
-		
+
 		Assert.assertArrayEquals(correct, found);
 		Assert.assertEquals(correct.length, num);
 	}
-	
+
 	@Test
 	public void testRangeQueryMaxNotFound_Medium() {
 		tree = buildMediumTree();
-		String[] correct = {"C", "D", "E", "F", "G"};
+		String[] correct = { "C", "D", "E", "F", "G" };
 		String[] found = new String[correct.length];
 		int num = tree.rangeQuery("C", "[", found);
-		
+
 		Assert.assertArrayEquals(correct, found);
 		Assert.assertEquals(correct.length, num);
 	}
-	
+
 	@Test
 	public void testRangeQueryFullTree_Medium() {
 		tree = buildMediumTree();
-		String[] correct = {"A", "B", "C", "D", "E", "F", "G"};
+		String[] correct = { "A", "B", "C", "D", "E", "F", "G" };
 		String[] found = new String[correct.length];
 		int num = tree.rangeQuery("A", "G", found);
-		
+
 		Assert.assertArrayEquals(correct, found);
 		Assert.assertEquals(correct.length, num);
 	}
-	
-	@Test (expected = IllegalArgumentException.class)
+
+	@Test(expected = IllegalArgumentException.class)
 	public void testRangeQueryInvalid_Medium() {
 		tree = buildMediumTree();
-		String[] correct = {"A", "B", "C", "D", "E", "F", "G"};
+		String[] correct = { "A", "B", "C", "D", "E", "F", "G" };
 		String[] found = new String[correct.length];
 		tree.rangeQuery("G", "A", found);
 	}
-	
-	@Test (expected = IllegalArgumentException.class)
+
+	@Test(expected = IllegalArgumentException.class)
 	public void testOrderQueryMinTooSmall_Medium() {
 		tree = buildMediumTree();
 		tree.orderQuery(-5, 2, new String[] {});
 	}
-	
-	@Test (expected = IllegalArgumentException.class)
+
+	@Test(expected = IllegalArgumentException.class)
 	public void testOrderQueryMaxTooBig_Medium() {
 		tree = buildMediumTree();
 		tree.orderQuery(2, 5000000, new String[] {});
 	}
-	
-	@Test (expected = IllegalArgumentException.class)
+
+	@Test(expected = IllegalArgumentException.class)
 	public void testOrderQueryMinBiggerMax_Medium() {
 		tree = buildMediumTree();
 		tree.orderQuery(500, 2, new String[] {});
 	}
-	
+
 	@Test
 	public void testOrderQueryNormal_Medium() {
 		tree = buildMediumTree();
-		String[] correct = {"C", "D", "E"};
+		String[] correct = { "C", "D", "E" };
 		String[] found = new String[correct.length];
 		tree.orderQuery(2, 4, found);
-		
+
 		Assert.assertArrayEquals(correct, found);
 	}
-	
+
 	@Test
 	public void testEqualsTrue_Medium() {
 		BST<String> one = buildMediumTree();
 		BST<String> two = buildMediumTree();
-		
+
 		Assert.assertTrue(one.equals(two));
 	}
-	
+
 	@Test
 	public void testEqualsFalse_Medium() {
 		BST<String> one = buildMediumTree();
 		BST<String> two = buildLargeTree();
-		
+
 		Assert.assertFalse(one.equals(two));
 	}
-	
+
 	@Test
 	public void testPredecessorMin_Medium() {
 		tree = buildMediumTree();
@@ -494,10 +494,10 @@ public class BSTTest {
 		while (test.getLeft() != null) {
 			test = test.getLeft();
 		}
-		
+
 		Assert.assertNull(tree.predecessor(test));
 	}
-	
+
 	@Test
 	public void testPredecessorDownTree_Medium() {
 		tree = buildMediumTree();
@@ -505,7 +505,7 @@ public class BSTTest {
 		Node<String> test = tree.getRoot();
 		Assert.assertEquals("C", tree.predecessor(test).getData());
 	}
-	
+
 	@Test
 	public void testPredecessorUpTree_Medium() {
 		tree = buildMediumTree();
@@ -513,19 +513,47 @@ public class BSTTest {
 		Node<String> test = tree.getRoot().getRight().getLeft();
 		Assert.assertEquals("D", tree.predecessor(test).getData());
 	}
-	
+
 	@Test
-	public void testLeftRotateRightsLeftNotNull_Medium() {
-		tree = BSTBuilder.buildBST(new String[][] {{"D"}, {null, "F"}, {null, "H"}, {"G", null}});
-		tree.leftRotate(tree.getRoot().getRight());
-		testTree(new String[][] {{"D"}, {null, "H"}, {"F", null}, {null, "G"}});
+	public void testLeftRotateParentNull_Small() {
+		tree = BSTBuilder.buildBST(new String[][] { { "D" }, { null, "F" }, { null, "H" } });
+		tree.leftRotate(tree.getRoot());
+		testTree(new String[][] { { "F" }, { "D", "H" } });
 	}
-	
+
 	@Test
-	public void testLeftRotateRightsLeftNull_Medium() {
-		tree = BSTBuilder.buildBST(new String[][] {{"D"}, {null, "F"}, {null, "H"}});
+	public void testLeftRotateRightsLeftNotNull_Small() {
+		tree = BSTBuilder.buildBST(new String[][] { { "D" }, { null, "F" }, { null, "H" }, { "G", null } });
 		tree.leftRotate(tree.getRoot().getRight());
-		testTree(new String[][] {{"D"}, {null, "H"}, {"F", null}});
+		testTree(new String[][] { { "D" }, { null, "H" }, { "F", null }, { null, "G" } });
+	}
+
+	@Test
+	public void testRightRotateParentNull_Small() {
+		tree = BSTBuilder.buildBST(new String[][] { { "D" }, { "C", null }, { "A", null } });
+		tree.rightRotate(tree.getRoot());
+		testTree(new String[][] { { "C" }, { "A", "D" } });
+	}
+
+	@Test
+	public void testLeftRotateRightsLeftNull_Small() {
+		tree = BSTBuilder.buildBST(new String[][] { { "D" }, { null, "F" }, { null, "H" } });
+		tree.leftRotate(tree.getRoot().getRight());
+		testTree(new String[][] { { "D" }, { null, "H" }, { "F", null } });
+	}
+
+	@Test
+	public void testRightRotateLeftsRightNotNull_Small() {
+		tree = BSTBuilder.buildBST(new String[][] { { "F" }, { "D", null }, { "B", null }, { null, "C" } });
+		tree.rightRotate(tree.getRoot().getLeft());
+		testTree(new String[][] { { "F" }, { "B", null }, { null, "D" }, { "C", null } });
+	}
+
+	@Test
+	public void testRightRotateLeftsRightNull_Small() {
+		tree = BSTBuilder.buildBST(new String[][] { { "F" }, { "D", null }, { "B", null } });
+		tree.rightRotate(tree.getRoot().getLeft());
+		testTree(new String[][] { { "F" }, { "B", null }, { null, "D" } });
 	}
 
 	private static BST<String> buildEmpty() {
