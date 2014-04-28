@@ -5,7 +5,9 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Iterator;
+import java.util.LinkedList;
 import java.util.List;
+import java.util.Queue;
 
 /**
  * Binary search tree implementation
@@ -98,7 +100,54 @@ public class BST<E extends Comparable<? super E>> extends AbstractSet<E> {
 	 *            root of an existing binary tree
 	 */
 	public BST(Node<E> root) throws TreeStructureException {
-		// TODO
+		if (!isBST(root)) {
+			throw new TreeStructureException("Copying a non-BST tree");
+		}
+		deepCopy(root);
+	}
+	
+	private void deepCopy(Node<E> root) {
+		// Quit fast for empty trees
+		if (root == null) {
+			return;
+		}
+		// We're gonna go level by level
+		Queue<Node<E>> them = new LinkedList<>();
+		Queue<Node<E>> us = new LinkedList<>();
+		
+		them.offer(root);
+		this.root = new Node<E>(root.getData());
+		us.offer(this.root);
+		
+		// Make sure to set up the size properly
+		this.size = 1;
+		
+		while (!them.isEmpty()) {
+			// Get each node to work with
+			Node<E> theirNode = them.poll();
+			Node<E> ourNode = us.poll();
+			
+			// Set our data and then get the children to link in
+			ourNode.setData(theirNode.getData());
+			Node<E> ourLeft = theirNode.getLeft() == null ? null : new Node<>(theirNode.getLeft().getData());
+			Node<E> ourRight = theirNode.getRight() == null ? null : new Node<>(theirNode.getRight().getData());
+			
+			// Only link in and process the non-null elements
+			if (ourLeft != null) {
+				ourLeft.setParent(ourNode);
+				ourNode.setLeft(ourLeft);
+				us.offer(ourLeft);
+				them.offer(theirNode.getLeft());
+				++this.size;;
+			}
+			if (ourRight != null) {
+				ourRight.setParent(ourNode);
+				ourNode.setRight(ourRight);
+				us.offer(ourRight);
+				them.offer(theirNode.getRight());
+				++this.size;
+			}			
+		}
 	}
 
 	// -------
@@ -542,9 +591,17 @@ public class BST<E extends Comparable<? super E>> extends AbstractSet<E> {
 	 * @param rt
 	 */
 	private boolean isBST(Node<E> root) {
-		// TODO
-
-		return false;
+		if (root == null) {
+			return true;
+		}
+		if (root.getLeft() != null && root.getLeft().getData().compareTo(root.getData()) >= 0) {
+			return false;
+		}
+		if (root.getRight() != null && root.getRight().getData().compareTo(root.getData()) <= 0)  {
+			return false;
+		}
+		
+		return isBST(root.getLeft()) && isBST(root.getRight());
 	}
 
 }
