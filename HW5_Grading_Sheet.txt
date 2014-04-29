@@ -1,0 +1,94 @@
+Automated Tests: 180 total points
+==================================
+	BST Methods
+		height				5 points
+		min					5 points
+		max					5 
+		getPreorderSeq		5 points
+		getInorderSeq 		5 points
+		getPostorderSeq		5 points
+		equals				15 points
+		setEquals			5 points
+		traversePreorde		5 points
+		traverseInorder		10 points
+		traversePostorde	5 points
+		rangeQuery			8 points
+		orderQuery			8 points
+		predecessor			10 points
+		leftRotate			15 points
+		rightRotate			15 points
+		isBST				15 points
+
+	BST Contructors
+		Default				4 points
+		E[]					5 points
+		Copy				15 points
+
+	TreeSorter methods
+		TreeSorter			15 points
+
+Manual Tests: 50 total points
+==================================
+	Time Complexities: 25 total points
+		height: O(h) 				2 points
+		min: O(h) 					2 points
+		max: O(h)					2 points
+		predecessor: O(h)			1 point
+		getPreorderSequence: O(n)	1 point
+		getInorderSequence: O(n)	1 point
+		getPostorderSequence: O(n)	1 point
+		traversePreorder: O(n)		1 point
+		traverseInorder: O(n) 		1 point
+		traversePostorder: O(n) 	1 point
+		equals: O(n) 				1 point
+		setEquals: O(n) 			1 point
+		rangeQuery: O(n) 			1 point
+		orderQuery: O(n) 			1 point
+		isBST: O(n) 				1 point
+		leftRotate: O(1)			3 points
+		rightRotate: O(1)			3 points
+		size: O(1)					1 point
+
+	Implementation Checks: 25 total points
+		Predecessor works on tree 	10 points
+		TreeSorter uses BST 		15 points
+
+
+Basics: 20 total points
+==================================
+	Style: 15 total points
+		Javadoc					3 points
+		@author tags			4 points
+		No duplicate code		8 points
+	Directory Structure: 5 total points
+
+
+TEMPLATE FOR GRADING:
+!!ONLY GIVE THEM THIS BELOW!!
+=============================
+ 
+Automated Test Output:
+[PUT OUTPUT HERE]
+ 
+------------------------
+HW 5 Grade
+Grader: [YOUR NAME HERE]
+Email: [YOUR EMAIL HERE]
+------------------------
+Automated Tests
+ = --/180
+ Issues:
+ 
+Manual Checks
+ = --/50
+ Issues:
+
+Basic Checks
+ = --/20 
+ 
+TOTAL GRADE
+ = --/250
+
+------------------------
+Comments:
+ + 
